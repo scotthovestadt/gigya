@@ -36,7 +36,5 @@
   "bugs": {
     "url": "https://github.com/scotthovestadt/node-gigya/issues"
   },
-  "homepage": "https://github.com/scotthovestadt/node-gigya",
-  "_id": "gigya@0.0.6",
-  "_from": "gigya@"
+  "homepage": "https://github.com/scotthovestadt/node-gigya"
 }
