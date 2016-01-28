@@ -71,3 +71,6 @@ gigya.accounts.search({
   return console.error(err);
 });
 ````
+
+##Gigya Front-End
+For your front-end implementation, check out [Gigya Markup](https://github.com/scotthovestadt/gigya-markup)!
