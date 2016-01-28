@@ -20,7 +20,7 @@ Please follow these steps to integrate Gigya within your NodeJS application:
 
 ##Sending a Request
 After you have logged in the user, you may use Gigya's API to access the user's profile and perform various activities. The following example demonstrates fetching a user's profile.
-```
+````js
 // Include Gigya's SDK
 var Gigya = require('gigya');
 
@@ -40,11 +40,11 @@ gigya.socialize.getUserInfo({
   // Otherwise, print response to console
   console.log(response);
 });
-```
+````
 
 ##Using EventEmitter style callbacks
 In addition to node-style callbacks, the SDK also support EventEmitter style callbacks:
-```
+````js
 gigya.socialize.getUserInfo({
   UID: 'PUT-UID-HERE'
 }).on('response', function(response) {
@@ -54,10 +54,10 @@ gigya.socialize.getUserInfo({
   // Request failed, handle error
   return console.error(err);
 });
-```
+````
 
 Additionally, accounts.search and ds.search have special support for streaming query response data:
-```
+````js
 gigya.accounts.search({
   query: 'SELECT * FROM accounts'
 }).on('result', function(account) {
@@ -70,4 +70,4 @@ gigya.accounts.search({
   // Request failed, handle error
   return console.error(err);
 });
-```
+````
