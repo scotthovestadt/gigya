@@ -4,7 +4,7 @@
   "keywords": [
     "gigya"
   ],
-  "version": "0.0.11",
+  "version": "2.0.1",
   "author": {
     "name": "Scott Hovestadt",
     "email": "scott.hovestadt@gmail.com"
@@ -20,18 +20,15 @@
     "url": "git://github.com/scotthovestadt/node-gigya.git"
   },
   "dependencies": {
-    "underscore": "*",
-    "async": "*",
-    "request": "*"
+    "@types/lodash": "^4.14.41",
+    "@types/node": "0.0.2",
+    "@types/request": "0.0.36",
+    "lodash": "^4.17.2",
+    "request": "^2.79.0"
   },
-  "engines": {
-    "node": ">=0.6.0"
-  },
-  "directories": {
-    "lib": "./lib"
-  },
-  "main": "index",
-  "readme": "Unofficial Gigya Node SDK\n==============\n\n##Support and Usage\nThis is an unofficial SDK for Gigya's REST API. It is not an officially supported product. Use at your own risk.\n\n##Installation\nGigya is listed on NPM. To install, run the following command within your project folder:\n```\nnpm install gigya\n```\n\n##Usage Guide\nPlease follow these steps to integrate Gigya within your NodeJS application:\n- Install the SDK\n- <a href=\"http://developers.gigya.com/010_Developer_Guide#API_Key_and_Site_Setup\">Obtain an API Key and Secret Key from Gigya</a>\n- Include the Gigya module within your project: `var Gigya = require('gigya');`\n- <a href=\"http://developers.gigya.com/040_Demos/010_Social_Identity_Management/010_Social_Login/001_Basic_Social_Login\">Login the user to acquire their UID</a>\n- <a href=\"https://github.com/Gigya-Inc/node-gigya/blob/master/README.md#sending-a-request\">Use Gigya's API to send requests</a>\n\n##Sending a Request\nAfter you have logged in the user, you may use Gigya's API to access the user's profile and perform various activities. The following example demonstrates fetching a user's profile.\n```\n// Include Gigya's SDK\nvar Gigya = require('gigya');\n\n// Initialize SDK with your API Key and Secret Key\nvar gigya = new Gigya('YOUR_API_KEY', 'YOUR_SECRET_KEY');\n\n// Fetch user's profile with REST API socialize.getUserInfo\n// Documentation: http://developers.gigya.com/037_API_reference/010_Socialize/socialize.getUserInfo\ngigya.socialize.getUserInfo({\n  UID: 'PUT-UID-HERE'\n}, function(err, response) {\n  if(err) {\n    // Request failed, handle error\n    return console.error(err);\n  }\n  \n  // Otherwise, print response to console\n  console.log(response);\n});\n```\n\n##Using EventEmitter style callbacks\nIn addition to node-style callbacks, the SDK also support EventEmitter style callbacks:\n```\ngigya.socialize.getUserInfo({\n  UID: 'PUT-UID-HERE'\n}).on('response', function(response) {\n  // Print response to console\n  console.log(response);\n}).on('err', function(err) {\n  // Request failed, handle error\n  return console.error(err);\n});\n```\n\nAdditionally, accounts.search and ds.search have special support for streaming query response data:\n```\ngigya.accounts.search({\n  query: 'SELECT * FROM accounts'\n}).on('result', function(account) {\n  // Do something with account...\n  console.log(account);\n}).on('end', function(summary) {\n  // Done streaming\n  console.log(summary);\n}).on('err', function(err) {\n  // Request failed, handle error\n  return console.error(err);\n});\n```\n",
+  "files": ["dist"],
+  "main": "dist/index.js",
+  "typings": "dist/index",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/scotthovestadt/node-gigya/issues"

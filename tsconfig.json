@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "declaration": true,
+        "module": "commonjs",
+        "target": "es5",
+        "lib": ["es6"],
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "sourceMap": true,
+        "typeRoots": [
+            "node_modules/@types",
+            "lib/interfaces"
+        ]
+    }
+}
