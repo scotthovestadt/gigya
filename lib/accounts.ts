@@ -1,6 +1,6 @@
 import Gigya from './gigya';
 import RBA from './rba';
-import Webhooks from './webhooks';
+import Webhooks from './accounts.webhooks';
 import Account from './interfaces/account';
 import SessionInfo from './interfaces/session-info';
 import GigyaResponse from './interfaces/gigya-response';
@@ -15,7 +15,7 @@ export class Accounts {
         this.rba = new RBA(gigya);
         this.webhooks = new Webhooks(gigya);
     }
-    
+
     /**
      * This method deletes the specified user's account from Gigya's database.
      * 
@@ -78,7 +78,7 @@ export class Accounts {
     public getCounters(params: any) {
         return this.gigya.request<any>('accounts.getCounters', params);
     }
-    
+
     /**
      * This method retrieves account policies.
      * 
@@ -102,8 +102,8 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getSchema+REST
      */
-    public getSchema(params: any) {
-        return this.gigya.request<any>('accounts.getSchema', params);
+    public getSchema(params?: AccountsGetSchemaParams) {
+        return this.gigya.request<AccountsGetSchemaResponse>('accounts.getSchema', params);
     }
 
     /**
@@ -111,10 +111,10 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getScreenSets+REST
      */
-    public getScreenSets(params: any) {
-        return this.gigya.request<any>('accounts.getScreenSets', params);
+    public getScreenSets(params?: GetScreenSetsParams) {
+        return this.gigya.request<GetScreenSetsResponse>('accounts.getScreenSets', params);
     }
-    
+
     /**
      * This method imports a user's profile photo to Gigya's server.
      * 
@@ -249,7 +249,7 @@ export class Accounts {
     public setAccountInfo(params: any) {
         return this.gigya.request<any>('accounts.setAccountInfo', params);
     }
-    
+
     /**
      * This method is used to modify site policies regarding user registration and login.
      * 
@@ -273,8 +273,8 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.setSchema+REST
      */
-    public setSchema(params: any) {
-        return this.gigya.request<any>('accounts.setSchema', params);
+    public setSchema(params: AccountsSetSchemaParams) {
+        return this.gigya.request('accounts.setSchema', params);
     }
 
     /**
@@ -283,7 +283,7 @@ export class Accounts {
      * @see http://developers.gigya.com/display/GD/accounts.setScreenSet+REST
      */
     public setScreenSet(params: any) {
-        return this.gigya.request<any>('accounts.setScreenSet', params);
+        return this.gigya.request('accounts.setScreenSet', params);
     }
 
     /**
@@ -342,6 +342,74 @@ export interface AccountsNotifyLoginParamsSiteUID extends AccountsNotifyLoginPar
 }
 export interface AccountsNotifyLoginParamsProviderSessions extends AccountsNotifyLoginParams {
     providerSessions: { [key: string]: any; };
+}
+
+export type AccountsSchemaWriteAccess = 'serverOnly' | 'clientCreate' | 'clientModify';
+export type AccountsSchemaType = 'integer' | 'long' | 'float' | 'basic-string' | 'string' | 'text' | 'date' | 'boolean';
+export type AccountsSchemaEncrypt = 'AES' | '';
+export interface AccountsSetSchemaParams {
+    profileSchema?: {
+        fields: { [key: string]: AccountsProfileSetSchemaField | null; }
+    };
+    dataSchema?: {
+        fields: { [key: string]: AccountsDataSetSchemaField | null; };
+        dynamicSchema?: boolean;
+    }
+    scope?: 'group' | 'site';
+}
+export interface AccountsProfileSetSchemaField {
+    required?: boolean;
+    writeAccess?: AccountsSchemaWriteAccess;
+    languages?: Array<string>;
+}
+export interface AccountsDataSetSchemaField extends AccountsProfileSetSchemaField {
+    allowNull?: boolean;
+    encrypt?: AccountsSchemaEncrypt;
+    format?: string;
+    type?: AccountsSchemaType;
+}
+
+export interface AccountsGetSchemaParams {
+    filter?: 'full' | 'explicitOnly' | 'clientOnly';
+    scope?: 'effective' | 'group' | 'site';
+}
+export interface AccountsGetSchemaResponse {
+    profileSchema: {
+        fields: { [key: string]: AccountsProfileGetSchemaField; }
+    };
+    dataSchema: {
+        fields: { [key: string]: AccountsDataGetSchemaField; };
+    }
+}
+export interface AccountsProfileGetSchemaField {
+    required: boolean;
+    writeAccess: AccountsSchemaWriteAccess;
+    languages?: Array<string>;
+}
+export interface AccountsDataGetSchemaField extends AccountsProfileSetSchemaField {
+    allowNull?: boolean;
+    encrypt?: AccountsSchemaEncrypt;
+    format?: string;
+    type: AccountsSchemaType;
+}
+
+export interface GetScreenSetsParams {
+    screenSetIDs?: string | Array<string>;
+    include?: string;
+}
+export interface GetScreenSetsResponse {
+    screenSets: Array<{
+        screenSetID: string;
+        html: string;
+        css: string;
+        metadata: {
+            desc?: string;
+            designerHtml: string;
+            targetEnv: string;
+            lastModified?: string;
+            version?: number;
+        };
+    }>;
 }
 
 export default Accounts;

@@ -5,6 +5,8 @@ import SigUtils from './sig-utils';
 import Socialize from './socialize';
 import Accounts from './accounts';
 import DS from './ds';
+import GM from './gm';
+import FIDM from './fidm';
 import GigyaError from './gigya-error';
 import GigyaResponse from './interfaces/gigya-response';
 import ErrorCode from './interfaces/error-code';
@@ -19,6 +21,8 @@ export class Gigya {
     public readonly socialize: Socialize;
     public readonly accounts: Accounts;
     public readonly ds: DS;
+    public readonly gm: GM;
+    public readonly fidm: FIDM;
 
     constructor(APIKey: string, dataCenter: string, secret: string);
     constructor(APIKey: string, dataCenter: string, userKey: string, secret?: string);
@@ -37,6 +41,8 @@ export class Gigya {
         this.socialize = new Socialize(this);
         this.accounts = new Accounts(this);
         this.ds = new DS(this);
+        this.gm = new GM(this);
+        this.fidm = new FIDM(this);
     }
 
     protected http<R>(uri: string, params: any): Promise<GigyaResponse & R> {
@@ -154,7 +160,5 @@ export class Gigya {
         return response;
     }
 }
-
-export * from './gigya-error';
 
 export default Gigya;
