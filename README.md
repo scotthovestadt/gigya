@@ -1,6 +1,13 @@
 Unofficial Gigya Node SDK
 ==============
 
+<img width="620" src="https://cloud.githubusercontent.com/assets/1831484/20920767/1a0acc7e-bb56-11e6-802f-31ed45a91768.png">
+
+<img width="498" src="https://cloud.githubusercontent.com/assets/1831484/20920781/2581495c-bb56-11e6-9206-dd7fd162f82f.png">
+
+<img width="541" src="https://cloud.githubusercontent.com/assets/1831484/20920780/25703306-bb56-11e6-91c8-6566736a2ccf.png">
+
+
 ##Support and Usage
 This is an unofficial SDK for Gigya's REST API. It is not an officially supported product. Use at your own risk.
 
