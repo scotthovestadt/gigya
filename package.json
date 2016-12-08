@@ -4,7 +4,7 @@
   "keywords": [
     "gigya"
   ],
-  "version": "2.0.3",
+  "version": "2.0.4",
   "author": {
     "name": "Scott Hovestadt",
     "email": "scott.hovestadt@gmail.com"
@@ -15,6 +15,10 @@
       "email": "scott.hovestadt@gmail.com"
     }
   ],
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "tsc"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/scotthovestadt/node-gigya.git"
@@ -26,12 +30,17 @@
     "lodash": "^4.17.2",
     "request": "^2.79.0"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "dist/index.js",
   "typings": "dist/index",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/scotthovestadt/node-gigya/issues"
   },
-  "homepage": "https://github.com/scotthovestadt/node-gigya"
+  "homepage": "https://github.com/scotthovestadt/node-gigya",
+  "devDependencies": {
+    "typescript": "^2.1.4"
+  }
 }
