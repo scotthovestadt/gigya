@@ -20,7 +20,7 @@ export class GM {
      * @see http://developers.gigya.com/display/GD/gm.deleteChallenge+REST
      */
     public deleteChallenge(params: any) {
-        return this.gigya.request('gm.deleteChallenge', params);
+        return this.gigya.request<any>('gm.deleteChallenge', params);
     }
 
     /**
@@ -38,7 +38,7 @@ export class GM {
      * @see http://developers.gigya.com/display/GD/gm.getActionConfig+REST
      */
     public getActionConfig(params: any) {
-        return this.gigya.request('gm.getActionConfig', params);
+        return this.gigya.request<any>('gm.getActionConfig', params);
     }
 
     /**
@@ -47,7 +47,7 @@ export class GM {
      * @see http://developers.gigya.com/display/GD/gm.getActionsLog+REST
      */
     public getActionsLog(params: any) {
-        return this.gigya.request('gm.getActionsLog', params);
+        return this.gigya.request<any>('gm.getActionsLog', params);
     }
 
     /**
@@ -56,7 +56,7 @@ export class GM {
      * @see http://developers.gigya.com/display/GD/gm.getChallengeConfig+REST
      */
     public getChallengeConfig(params: any) {
-        return this.gigya.request('gm.getChallengeConfig', params);
+        return this.gigya.request<any>('gm.getChallengeConfig', params);
     }
 
     /**
@@ -65,7 +65,7 @@ export class GM {
      * @see http://developers.gigya.com/display/GD/gm.getChallengeStatus+REST
      */
     public getChallengeStatus(params: any) {
-        return this.gigya.request('gm.getChallengeStatus', params);
+        return this.gigya.request<any>('gm.getChallengeStatus', params);
     }
 
     /**
@@ -74,7 +74,7 @@ export class GM {
      * @see http://developers.gigya.com/display/GD/gm.getChallengeVariants+REST
      */
     public getChallengeVariants(params: any) {
-        return this.gigya.request('gm.getChallengeVariants', params);
+        return this.gigya.request<any>('gm.getChallengeVariants', params);
     }
 
     /**
@@ -83,7 +83,7 @@ export class GM {
      * @see http://developers.gigya.com/display/GD/gm.getGlobalConfig+REST
      */
     public getGlobalConfig(params: any) {
-        return this.gigya.request('gm.getGlobalConfig', params);
+        return this.gigya.request<any>('gm.getGlobalConfig', params);
     }
 
     /**
@@ -92,7 +92,7 @@ export class GM {
      * @see http://developers.gigya.com/display/GD/gm.getTopUsers+REST
      */
     public getTopUsers(params: any) {
-        return this.gigya.request('gm.getTopUsers', params);
+        return this.gigya.request<any>('gm.getTopUsers', params);
     }
 
     /**

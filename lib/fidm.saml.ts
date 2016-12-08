@@ -1,8 +1,12 @@
 import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
+import IdP from './fidm.saml.idp';
 
 export class SAML {
+    public readonly idp: IdP;
+
     constructor(protected gigya: Gigya) {
+        this.idp = new IdP(gigya);
     }
 
     /**
@@ -20,7 +24,7 @@ export class SAML {
      * @see http://developers.gigya.com/display/GD/fidm.saml.getConfig+REST
      */
     public getConfig(params: any) {
-        return this.gigya.request('fidm.saml.getConfig', params);
+        return this.gigya.request<any>('fidm.saml.getConfig', params);
     }
 
     /**
@@ -29,7 +33,7 @@ export class SAML {
      * @see http://developers.gigya.com/display/GD/fidm.saml.getRegisteredIdPs+REST
      */
     public getRegisteredIdPs(params: any) {
-        return this.gigya.request('fidm.saml.getRegisteredIdPs', params);
+        return this.gigya.request<any>('fidm.saml.getRegisteredIdPs', params);
     }
 
     /**
@@ -38,7 +42,7 @@ export class SAML {
      * @see http://developers.gigya.com/display/GD/fidm.saml.importIdPMetadata+REST
      */
     public importIdPMetadata(params: any) {
-        return this.gigya.request('fidm.saml.importIdPMetadata', params);
+        return this.gigya.request<any>('fidm.saml.importIdPMetadata', params);
     }
 
     /**

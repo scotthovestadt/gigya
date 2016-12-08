@@ -23,7 +23,7 @@ export class Socialize {
      * @see http://developers.gigya.com/display/GD/socialize.delUserSettings+REST
      */
     public delUserSettings(params: any) {
-        return this.gigya.request<any>('socialize.delUserSettings', params);
+        return this.gigya.request('socialize.delUserSettings', params);
     }
 
     /**
@@ -185,7 +185,7 @@ export class Socialize {
      * @see http://developers.gigya.com/display/GD/socialize.removeConnection+REST
      */
     public removeConnection(params: any) {
-        return this.gigya.request<any>('socialize.removeConnection', params);
+        return this.gigya.request('socialize.removeConnection', params);
     }
 
     /**

@@ -121,7 +121,7 @@ export class Accounts {
      * @see http://developers.gigya.com/display/GD/accounts.importProfilePhoto+REST
      */
     public importProfilePhoto(params: any) {
-        return this.gigya.request<any>('accounts.importProfilePhoto', params);
+        return this.gigya.request('accounts.importProfilePhoto', params);
     }
 
     /**
@@ -130,7 +130,7 @@ export class Accounts {
      * @see http://developers.gigya.com/display/GD/accounts.incrementCounters+REST
      */
     public incrementCounters(params: any) {
-        return this.gigya.request<any>('accounts.incrementCounters', params);
+        return this.gigya.request('accounts.incrementCounters', params);
     }
 
     /**
@@ -147,8 +147,8 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.isAvailableLoginID+REST
      */
-    public isAvailableLoginID(params: any) {
-        return this.gigya.request<any>('accounts.isAvailableLoginID', params);
+    public isAvailableLoginID(params: AccountsIsAvailableLoginIDParams) {
+        return this.gigya.request<AccountsIsAvailableLoginIDResponse>('accounts.isAvailableLoginID', params);
     }
 
     /**
@@ -220,7 +220,7 @@ export class Accounts {
      * @see http://developers.gigya.com/display/GD/accounts.resendVerificationCode+REST
      */
     public resendVerificationCode(params: any) {
-        return this.gigya.request<any>('accounts.resendVerificationCode', params);
+        return this.gigya.request('accounts.resendVerificationCode', params);
     }
 
     /**
@@ -229,7 +229,7 @@ export class Accounts {
      * @see http://developers.gigya.com/display/GD/accounts.resetPassword+REST
      */
     public resetPassword(params: any) {
-        return this.gigya.request<any>('accounts.resetPassword', params);
+        return this.gigya.request('accounts.resetPassword', params);
     }
 
     /**
@@ -247,7 +247,7 @@ export class Accounts {
      * @see http://developers.gigya.com/display/GD/accounts.setAccountInfo+REST
      */
     public setAccountInfo(params: any) {
-        return this.gigya.request<any>('accounts.setAccountInfo', params);
+        return this.gigya.request('accounts.setAccountInfo', params);
     }
 
     /**
@@ -256,7 +256,7 @@ export class Accounts {
      * @see http://developers.gigya.com/display/GD/accounts.setPolicies+REST
      */
     public setPolicies(params: any) {
-        return this.gigya.request<any>('accounts.setPolicies', params);
+        return this.gigya.request('accounts.setPolicies', params);
     }
 
     /**
@@ -265,7 +265,7 @@ export class Accounts {
      * @see http://developers.gigya.com/display/GD/accounts.setProfilePhoto+REST
      */
     public setProfilePhoto(params: any) {
-        return this.gigya.request<any>('accounts.setProfilePhoto', params);
+        return this.gigya.request('accounts.setProfilePhoto', params);
     }
 
     /**
@@ -292,7 +292,7 @@ export class Accounts {
      * @see http://developers.gigya.com/display/GD/accounts.unregisterCounters+REST
      */
     public unregisterCounters(params: any) {
-        return this.gigya.request<any>('accounts.unregisterCounters', params);
+        return this.gigya.request('accounts.unregisterCounters', params);
     }
 }
 
@@ -410,6 +410,13 @@ export interface GetScreenSetsResponse {
             version?: number;
         };
     }>;
+}
+
+export interface AccountsIsAvailableLoginIDParams {
+    loginID: string;
+}
+export interface AccountsIsAvailableLoginIDResponse {
+    isAvailable: boolean;
 }
 
 export default Accounts;

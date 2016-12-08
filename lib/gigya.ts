@@ -7,6 +7,7 @@ import Accounts from './accounts';
 import DS from './ds';
 import GM from './gm';
 import FIDM from './fidm';
+import Reports from './reports';
 import GigyaError from './gigya-error';
 import GigyaResponse from './interfaces/gigya-response';
 import ErrorCode from './interfaces/error-code';
@@ -23,6 +24,7 @@ export class Gigya {
     public readonly ds: DS;
     public readonly gm: GM;
     public readonly fidm: FIDM;
+    public readonly reports: Reports;
 
     constructor(APIKey: string, dataCenter: string, secret: string);
     constructor(APIKey: string, dataCenter: string, userKey: string, secret?: string);
@@ -43,6 +45,7 @@ export class Gigya {
         this.ds = new DS(this);
         this.gm = new GM(this);
         this.fidm = new FIDM(this);
+        this.reports = new Reports(this);
     }
 
     protected http<R>(uri: string, params: any): Promise<GigyaResponse & R> {

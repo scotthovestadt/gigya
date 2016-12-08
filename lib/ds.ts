@@ -29,7 +29,7 @@ export class DS {
      * @see http://developers.gigya.com/display/GD/ds.getSchema+REST
      */
     public getSchema(params: any) {
-        return this.gigya.request('ds.getSchema', params);
+        return this.gigya.request<any>('ds.getSchema', params);
     }
 
     /**
@@ -55,8 +55,8 @@ export class DS {
      * 
      * @see http://developers.gigya.com/display/GD/ds.store+REST
      */
-    public store(params: any) {
-        return this.gigya.request('ds.setSchema', params);
+    public store(params: DSStoreParams) {
+        return this.gigya.request<DSStoreResponse>('ds.setSchema', params);
     }
 }
 
@@ -91,6 +91,18 @@ export interface DSSearchResponse {
     totalCount: number;
     results: Array<DSObject>;
     nextCursorId?: string;
+}
+
+export type DSStoreUpdateBehavior = 'arrayPush' | 'arraySet' | 'replace';
+export interface DSStoreParams {
+    data: any;
+    type: string;
+    oid: string | 'auto';
+    UID?: string;
+    updateBehavior: 'arrayPush' | 'arraySet' | 'replace';
+}
+export interface DSStoreResponse {
+    oid: string;
 }
 
 export default DS;
