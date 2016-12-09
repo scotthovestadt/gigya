@@ -1,4 +1,4 @@
-Unofficial Gigya Node SDK
+Unofficial Gigya JavaScript REST SDK
 ==============
 
 <img width="620" src="https://cloud.githubusercontent.com/assets/1831484/20920767/1a0acc7e-bb56-11e6-802f-31ed45a91768.png">
