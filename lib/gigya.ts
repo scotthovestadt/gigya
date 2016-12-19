@@ -1,3 +1,4 @@
+import fs = require('fs');
 import _ = require('lodash');
 import request = require('request');
 import sleep from './helpers/sleep';
@@ -13,6 +14,8 @@ import GigyaResponse from './interfaces/gigya-response';
 import ErrorCode from './interfaces/error-code';
 
 export class Gigya {
+    private gigyaCertificatePath:string = "/assets/certificates/gigyaCA.cer";
+    private gigyaCertificate:string;
     protected static readonly _RATE_LIMIT_SLEEP = 2000;
     protected APIKey: string;
     protected dataCenter: string;
@@ -49,8 +52,12 @@ export class Gigya {
     }
 
     protected http<R>(uri: string, params: any): Promise<GigyaResponse & R> {
+        if(!this.gigyaCertificate) {
+            this.gigyaCertificate = fs.readFileSync(`${__dirname} ${this.gigyaCertificatePath}`, 'utf-8');
+        }
         return new Promise<GigyaResponse & R>((resolve, reject) => {
             request.post(uri, {
+                ca: this.gigyaCertificate,
                 method: 'post',
                 form: params
             }, (error, response, body) => {

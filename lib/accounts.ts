@@ -183,7 +183,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.notifyLogin+REST
      */
-    public notifyLogin(params: AccountsNotifyLoginParamsSiteUID | AccountsNotifyLoginParamsProviderSessions) {
+    public notifyLogin(params: AccountsNotifyLoginParams | AccountsNotifyLoginParamsProviderSessions) {
         return this.gigya.request<Account & SessionInfo>('accounts.notifyLogin', params);
     }
 
@@ -331,15 +331,14 @@ export interface AccountsLogoutParams {
 }
 
 export interface AccountsNotifyLoginParams {
-    siteUID?: string;
+    siteUID: string;
     providerSessions?: { [key: string]: any; };
     cid?: string;
     targetEnv?: TargetEnv;
     regSource?: string;
+    sessionExpiration?: number;
 }
-export interface AccountsNotifyLoginParamsSiteUID extends AccountsNotifyLoginParams {
-    siteUID: string;
-}
+
 export interface AccountsNotifyLoginParamsProviderSessions extends AccountsNotifyLoginParams {
     providerSessions: { [key: string]: any; };
 }
