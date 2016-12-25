@@ -11,6 +11,8 @@ import Reports from './reports';
 import GigyaError from './gigya-error';
 import GigyaResponse from './interfaces/gigya-response';
 import ErrorCode from './interfaces/error-code';
+import fs = require('fs');
+import path = require('path');
 
 export class Gigya {
     protected static readonly _RATE_LIMIT_SLEEP = 2000;
@@ -40,6 +42,7 @@ export class Gigya {
             this.secret = secret;
         }
 
+        // Initialize sub-classes.
         this.sigUtils = new SigUtils(this.secret);
         this.socialize = new Socialize(this);
         this.accounts = new Accounts(this);
@@ -47,13 +50,19 @@ export class Gigya {
         this.gm = new GM(this);
         this.fidm = new FIDM(this);
         this.reports = new Reports(this);
+
+        // Setup certificate.
+        const certFile = path.join(__dirname, '../assets/cacert.pem');
+        if (fs.existsSync(certFile)) {
+            this.setCertificate(fs.readFileSync(certFile));
+        }
     }
 
     /**
      * Set certificate file contents.
      */
-    public setCertificate(certificateFileContents: string) {
-        this.certificate = certificateFileContents;
+    public setCertificate(certificateFileContents: string | Buffer) {
+        this.certificate = certificateFileContents.toString();
     }
 
     protected http<R>(uri: string, params: any): Promise<GigyaResponse & R> {

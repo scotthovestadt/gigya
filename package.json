@@ -31,7 +31,8 @@
     "request": "^2.79.0"
   },
   "files": [
-    "dist"
+    "dist",
+    "assets"
   ],
   "main": "dist/index.js",
   "typings": "dist/index",
