@@ -54,15 +54,6 @@ export class Socialize {
     }
 
     /**
-     * This API retrieves the feeds of a specified feed stream.
-     * 
-     * @see http://developers.gigya.com/display/GD/socialize.getFeed+REST
-     */
-    public getFeed(params: any) {
-        return this.gigya.request<any>('socialize.getFeed', params);
-    }
-
-    /**
      * Returns information about friends of the current user.
      * 
      * @see http://developers.gigya.com/display/GD/socialize.getFriendsInfo+REST
