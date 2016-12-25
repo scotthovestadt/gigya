@@ -18,6 +18,7 @@ export class Gigya {
     protected dataCenter: string;
     protected userKey: string | undefined;
     protected secret: string;
+    protected certificate: string;
     public readonly sigUtils: SigUtils;
     public readonly socialize: Socialize;
     public readonly accounts: Accounts;
@@ -48,11 +49,19 @@ export class Gigya {
         this.reports = new Reports(this);
     }
 
+    /**
+     * Set certificate file contents.
+     */
+    public setCertificate(certificateFileContents: string) {
+        this.certificate = certificateFileContents;
+    }
+
     protected http<R>(uri: string, params: any): Promise<GigyaResponse & R> {
         return new Promise<GigyaResponse & R>((resolve, reject) => {
             request.post(uri, {
                 method: 'post',
-                form: params
+                form: params,
+                ca: this.certificate
             }, (error, response, body) => {
                 if (error) {
                     reject(error);
