@@ -27,6 +27,7 @@
     "@types/lodash": "^4.14.41",
     "@types/node": "0.0.2",
     "@types/request": "0.0.36",
+    "file-system": "^2.2.2",
     "lodash": "^4.17.2",
     "request": "^2.79.0"
   },
