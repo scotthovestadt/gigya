@@ -1,4 +1,4 @@
-export type SessionExpiration = SessionExpirationEnum | 0 | -1 | -2;
+export type SessionExpiration = number;
 
 export enum SessionExpirationEnum {
     SESSION = 0,
