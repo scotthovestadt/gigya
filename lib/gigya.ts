@@ -29,6 +29,9 @@ export class Gigya {
     public readonly fidm: FIDM;
     public readonly reports: Reports;
 
+    /**
+     * Initialize new instance of Gigya.
+     */
     constructor(APIKey: string, dataCenter: string, secret: string);
     constructor(APIKey: string, dataCenter: string, userKey: string, secret?: string);
     constructor(APIKey: string, dataCenter: string, userKey: string, secret?: string) {
@@ -65,46 +68,11 @@ export class Gigya {
         this.certificate = certificateFileContents.toString();
     }
 
-    protected http<R>(uri: string, params: any): Promise<GigyaResponse & R> {
-        return new Promise<GigyaResponse & R>((resolve, reject) => {
-            request.post(uri, {
-                method: 'post',
-                form: params,
-                ca: this.certificate
-            }, (error, response, body) => {
-                if (error) {
-                    reject(error);
-                }
-                try {
-                    resolve(JSON.parse(body));
-                } catch (ex) {
-                    reject(ex);
-                }
-            });
-        });
-    }
-
-    protected createErrorFromResponse(response: GigyaResponse, endpoint: string, params: Object) {
-        // Create meaningful error message.
-        let errorMessage = `Gigya API ${endpoint} failed with error code ${response.errorCode}`;
-        const errorDetails = response.errorDetails ? response.errorDetails : response.errorMessage;
-        if (errorDetails) {
-            errorMessage += ` and message ${errorDetails}`;
-        }
-        if (response.validationErrors) {
-            errorMessage += ':';
-            for (const validationError of response.validationErrors) {
-                errorMessage += ` ${validationError.fieldName}: ${validationError.message}`;
-            }
-        }
-
-        const error = new GigyaError(errorMessage);
-        error.gigyaResponse = response;
-        error.errorCode = response.errorCode;
-        error.params = params;
-        return error;
-    }
-
+    /**
+     * Make request to Gigya. Typically, you'll want to use the defined interface (for example gigya.accounts.getAccountInfo) instead of calling request directly.
+     * 
+     * If a method is not available, create an issue or pull request at: https://github.com/scotthovestadt/gigya
+     */
     public async request<R>(endpoint: string, userParams: any, retries = 0, retryOnAnyError = false, retryDelay = 5000): Promise<GigyaResponse & R> {
         // Get endpoint namespace.
         const namespace = endpoint.substring(0, endpoint.indexOf('.'));
@@ -179,6 +147,52 @@ export class Gigya {
 
         // Return Gigya's successful response.
         return response;
+    }
+
+    /**
+     * Make HTTP request.
+     */
+    protected http<R>(uri: string, params: any): Promise<GigyaResponse & R> {
+        return new Promise<GigyaResponse & R>((resolve, reject) => {
+            request.post(uri, {
+                method: 'post',
+                form: params,
+                ca: this.certificate
+            }, (error, response, body) => {
+                if (error) {
+                    reject(error);
+                }
+                try {
+                    resolve(JSON.parse(body));
+                } catch (ex) {
+                    reject(ex);
+                }
+            });
+        });
+    }
+
+    /**
+     * Create GigyaError from response.
+     */
+    protected createErrorFromResponse(response: GigyaResponse, endpoint: string, params: Object): GigyaError {
+        // Create meaningful error message.
+        let errorMessage = `Gigya API ${endpoint} failed with error code ${response.errorCode}`;
+        const errorDetails = response.errorDetails ? response.errorDetails : response.errorMessage;
+        if (errorDetails) {
+            errorMessage += ` and message ${errorDetails}`;
+        }
+        if (response.validationErrors) {
+            errorMessage += ':';
+            for (const validationError of response.validationErrors) {
+                errorMessage += ` ${validationError.fieldName}: ${validationError.message}`;
+            }
+        }
+
+        const error = new GigyaError(errorMessage);
+        error.gigyaResponse = response;
+        error.errorCode = response.errorCode;
+        error.params = params;
+        return error;
     }
 }
 
