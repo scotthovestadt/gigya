@@ -21,13 +21,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/scotthovestadt/node-gigya.git"
+    "url": "git://github.com/scotthovestadt/gigya.git"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.41",
-    "@types/node": "^6.0.53",
-    "@types/request": "^0.0.36",
-    "lodash": "^4.17.2",
+    "@types/lodash": "^4.14.50",
+    "@types/node": "^7.0.0",
+    "@types/request": "^0.0.39",
+    "lodash": "^4.17.4",
     "request": "^2.79.0"
   },
   "files": [
@@ -38,10 +38,10 @@
   "typings": "dist/index",
   "readmeFilename": "README.md",
   "bugs": {
-    "url": "https://github.com/scotthovestadt/node-gigya/issues"
+    "url": "https://github.com/scotthovestadt/gigya/issues"
   },
-  "homepage": "https://github.com/scotthovestadt/node-gigya",
+  "homepage": "https://github.com/scotthovestadt/gigya",
   "devDependencies": {
-    "typescript": "2.1.4"
+    "typescript": "2.1.5"
   }
 }
