@@ -775,24 +775,21 @@ export interface AccountsGetSchemaParams {
 }
 export interface AccountsGetSchemaResponse {
     profileSchema: {
-        fields: { [key: string]: AccountsProfileGetSchemaField; }
+        fields: { [key: string]: AccountsGetSchemaField; }
     };
     dataSchema: {
-        fields: { [key: string]: AccountsDataGetSchemaField; };
+        fields: { [key: string]: AccountsGetSchemaField; };
     }
 }
-export interface AccountsProfileGetSchemaField {
+export interface AccountsGetSchemaField {
+    type: AccountsSchemaType;
     required: boolean;
     writeAccess: AccountsSchemaWriteAccess;
+    allowNull: boolean;
     languages?: Array<string>;
-}
-export interface AccountsDataGetSchemaField extends AccountsProfileSetSchemaField {
-    allowNull?: boolean;
     encrypt?: AccountsSchemaEncrypt;
     format?: string;
-    type: AccountsSchemaType;
 }
-
 export interface ScreenSet {
     screenSetID: string;
     html: string;
