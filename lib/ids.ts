@@ -1,5 +1,9 @@
 import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
+import BaseParams from './interfaces/base-params';
+
+export * from './interfaces/gigya-response';
+export * from './interfaces/base-params';
 
 export class IDS {
     constructor(protected gigya: Gigya) {
@@ -10,7 +14,7 @@ export class IDS {
      * 
      * @see http://developers.gigya.com/display/GD/ids.deleteAccount+REST
      */
-    public deleteAccount(params: any) {
+    public deleteAccount(params: BaseParams & any) {
         return this.gigya.request('ids.deleteAccount', params);
     }
 
@@ -19,7 +23,7 @@ export class IDS {
      * 
      * @see http://developers.gigya.com/display/GD/ids.getAccountInfo+REST
      */
-    public getAccountInfo(params: any) {
+    public getAccountInfo(params: BaseParams & any) {
         return this.gigya.request<any>('ids.getAccountInfo', params);
     }
 
@@ -28,7 +32,7 @@ export class IDS {
      * 
      * @see http://developers.gigya.com/display/GD/ids.getCounters+REST
      */
-    public getCounters(params: any) {
+    public getCounters(params: BaseParams & any) {
         return this.gigya.request<any>('ids.getCounters', params);
     }
 
@@ -37,7 +41,7 @@ export class IDS {
      * 
      * @see http://developers.gigya.com/display/GD/ids.getRegisteredCounters+REST
      */
-    public getRegisteredCounters(params: any) {
+    public getRegisteredCounters(params: BaseParams & any) {
         return this.gigya.request<any>('ids.getRegisteredCounters', params);
     }
 
@@ -46,7 +50,7 @@ export class IDS {
      * 
      * @see http://developers.gigya.com/display/GD/ids.getSchema+REST
      */
-    public getSchema(params: any) {
+    public getSchema(params: BaseParams & any) {
         return this.gigya.request<any>('ids.getSchema', params);
     }
 
@@ -55,7 +59,7 @@ export class IDS {
      * 
      * @see http://developers.gigya.com/display/GD/ids.incrementCounters+REST
      */
-    public incrementCounters(params: any) {
+    public incrementCounters(params: BaseParams & any) {
         return this.gigya.request('ids.incrementCounters', params);
     }
 
@@ -64,7 +68,7 @@ export class IDS {
      * 
      * @see http://developers.gigya.com/display/GD/ids.registerCounters+REST
      */
-    public registerCounters(params: any) {
+    public registerCounters(params: BaseParams & any) {
         return this.gigya.request('ids.registerCounters', params);
     }
 
@@ -73,7 +77,7 @@ export class IDS {
      * 
      * @see http://developers.gigya.com/display/GD/ids.search+REST
      */
-    public search(params: any) {
+    public search(params: BaseParams & any) {
         return this.gigya.request<any>('ids.search', params);
     }
 
@@ -82,7 +86,7 @@ export class IDS {
      * 
      * @see http://developers.gigya.com/display/GD/ids.setAccountInfo+REST
      */
-    public setAccountInfo(params: any) {
+    public setAccountInfo(params: BaseParams & any) {
         return this.gigya.request('ids.setAccountInfo', params);
     }
 
@@ -91,7 +95,7 @@ export class IDS {
      * 
      * @see http://developers.gigya.com/display/GD/ids.setSchema+REST
      */
-    public setSchema(params: any) {
+    public setSchema(params: BaseParams & any) {
         return this.gigya.request('ids.setSchema', params);
     }
 
@@ -100,7 +104,7 @@ export class IDS {
      * 
      * @see http://developers.gigya.com/display/GD/ids.unregisterCounters+REST
      */
-    public unregisterCounters(params: any) {
+    public unregisterCounters(params: BaseParams & any) {
         return this.gigya.request('ids.unregisterCounters', params);
     }
 }

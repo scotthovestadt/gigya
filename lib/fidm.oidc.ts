@@ -2,6 +2,9 @@ import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
 import OP from './fidm.oidc.op';
 
+export * from './interfaces/gigya-response';
+export * from './fidm.oidc.op';
+
 export class OIDC {
     public readonly op: OP;
 

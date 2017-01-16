@@ -1,7 +1,7 @@
 import _ = require('lodash');
-import request = require('request');
 import sleep from './helpers/sleep';
 import SigUtils from './sig-utils';
+import Admin from './admin';
 import Socialize from './socialize';
 import Accounts from './accounts';
 import DS from './ds';
@@ -11,17 +11,34 @@ import Reports from './reports';
 import GigyaError from './gigya-error';
 import GigyaResponse from './interfaces/gigya-response';
 import ErrorCode from './interfaces/error-code';
-import fs = require('fs');
-import path = require('path');
+import ProxyHttpRequest from './interfaces/proxy-http-request';
+import BaseParams from './interfaces/base-params';
+
+export * from './sig-utils';
+export * from './admin';
+export * from './socialize';
+export * from './accounts';
+export * from './ds';
+export * from './gm';
+export * from './fidm';
+export * from './reports';
+export * from './gigya-error';
+export * from './interfaces/gigya-response';
+export * from './interfaces/error-code';
+export * from './interfaces/proxy-http-request';
+export * from './interfaces/base-params';
 
 export class Gigya {
-    protected static readonly _RATE_LIMIT_SLEEP = 2000;
-    protected APIKey: string;
-    protected dataCenter: string;
+    protected static readonly RATE_LIMIT_SLEEP = 2000;
+    protected static readonly RETRY_LIMIT = 5;
+    protected static readonly RETRY_DELAY = 5000;
+    protected apiKey: string | undefined;
+    protected dataCenter: string | undefined;
     protected userKey: string | undefined;
-    protected secret: string;
-    protected certificate: string;
+    protected secret: string | undefined;
+    protected httpRequest: ProxyHttpRequest;
     public readonly sigUtils: SigUtils;
+    public readonly admin: Admin;
     public readonly socialize: Socialize;
     public readonly accounts: Accounts;
     public readonly ds: DS;
@@ -32,40 +49,44 @@ export class Gigya {
     /**
      * Initialize new instance of Gigya.
      */
-    constructor(APIKey: string, dataCenter: string, secret: string);
-    constructor(APIKey: string, dataCenter: string, userKey: string, secret?: string);
-    constructor(APIKey: string, dataCenter: string, userKey: string, secret?: string) {
+    constructor();
+    constructor(proxyHttpRequest: ProxyHttpRequest);
+    constructor(apiKey: string, dataCenter: string, proxy: ProxyHttpRequest);
+    constructor(apiKey: string, dataCenter: string, secret: string);
+    constructor(apiKey: string, dataCenter: string, userKey: string, secret?: string);
+    constructor(apiKeyOrProxy?: string | ProxyHttpRequest, dataCenter?: string, userKeyOrSecretOrProxy?: string | ProxyHttpRequest, secret?: string) {
         // Work with overload signature.
-        this.APIKey = APIKey;
-        this.dataCenter = dataCenter;
-        if (!secret) {
-            this.secret = userKey;
-        } else {
-            this.userKey = userKey;
-            this.secret = secret;
+        if (typeof apiKeyOrProxy === 'function') {
+            this.httpRequest = apiKeyOrProxy;
+        } else if (apiKeyOrProxy) {
+            this.apiKey = apiKeyOrProxy;
+            this.dataCenter = dataCenter;
+            if (typeof userKeyOrSecretOrProxy === 'function') {
+                this.httpRequest = userKeyOrSecretOrProxy;
+            } else if (!secret) {
+                this.secret = userKeyOrSecretOrProxy;
+            } else {
+                this.userKey = userKeyOrSecretOrProxy;
+                this.secret = secret;
+            }
+        }
+
+        // Late-initialize default proxy to support browser-based environments.
+        // Should not typically be used instead of Gigya JS SDK for public-facing sites.
+        // Designed for environments where access is given directly to API in browser but request is proxied through server for credentials.
+        if (!this.httpRequest) {
+            this.httpRequest = require('./helpers/default-http-request').httpRequest;
         }
 
         // Initialize sub-classes.
         this.sigUtils = new SigUtils(this.secret);
+        this.admin = new Admin(this);
         this.socialize = new Socialize(this);
         this.accounts = new Accounts(this);
         this.ds = new DS(this);
         this.gm = new GM(this);
         this.fidm = new FIDM(this);
         this.reports = new Reports(this);
-
-        // Setup certificate.
-        const certFile = path.join(__dirname, '../assets/cacert.pem');
-        if (fs.existsSync(certFile)) {
-            this.setCertificate(fs.readFileSync(certFile));
-        }
-    }
-
-    /**
-     * Set certificate file contents.
-     */
-    public setCertificate(certificateFileContents: string | Buffer) {
-        this.certificate = certificateFileContents.toString();
     }
 
     /**
@@ -73,41 +94,59 @@ export class Gigya {
      * 
      * If a method is not available, create an issue or pull request at: https://github.com/scotthovestadt/gigya
      */
-    public async request<R>(endpoint: string, userParams: any, retries = 0, retryOnAnyError = false, retryDelay = 5000): Promise<GigyaResponse & R> {
-        // Get endpoint namespace.
-        const namespace = endpoint.substring(0, endpoint.indexOf('.'));
+    public async request<R>(endpoint: string, userParams: any): Promise<GigyaResponse & R> {
+        return this._request<R>(endpoint, userParams);
+    }
+
+    /**
+     * Internal handler for requests.
+     */
+    protected async _request<R>(endpoint: string, userParams: BaseParams & { [key: string]: any; }, retries = 0): Promise<GigyaResponse & R> {
+        const dataCenter = userParams.dataCenter || this.dataCenter || 'us1';
 
         // Create final set of params with defaults, credentials, and params.
-        const requestParams: { [key: string]: string; } = _.assignIn(
+        const requestParams: { [key: string]: string | null | number | boolean; } = _.assignIn(
+            _.mapValues(userParams, (value: any) => {
+                // Gigya wants arrays and objects stringified into JSON, eg Account profile and data objects.
+                if (value && (_.isObject(value) || _.isArray(value))) {
+                    return JSON.stringify(value);
+                } else {
+                    return value;
+                }
+            }),
             {
-                format: 'json',
-                userKey: this.userKey,
-                secret: this.secret
-            },
-            userParams
-        ) as any;
-        if (this.APIKey && namespace !== 'admin') {
-            requestParams['APIKey'] = this.APIKey;
-        }
+                format: 'json'
+            }
+        );
 
-        // Gigya wants most arrays and objects stringified into JSON, eg Account profile and data objects.
-        for (const key in requestParams) {
-            const value = requestParams[key];
-            if (value && (_.isObject(value) || _.isArray(value))) {
-                requestParams[key] = JSON.stringify(value);
+        // Don't add credentials or API Key to request if oauth_token provided.
+        if (!userParams.oauth_token) {
+            // Add credentials to request if no credentials provided.
+            if (!userParams.secret && !userParams.userKey) {
+                if(this.secret) {
+                    requestParams['secret'] = this.secret;
+                }
+                if (this.userKey) {
+                    requestParams['userKey'] = this.userKey;
+                }
+            }
+
+            // Add API key to request if not provided.
+            if (!userParams.apiKey) {
+                const namespace = endpoint.substring(0, endpoint.indexOf('.'));
+                if (this.apiKey && namespace !== 'admin') {
+                    requestParams['apiKey'] = this.apiKey;
+                }
             }
         }
-
-        // Construct URL (minus params).
-        const uri = `https://${namespace}.${this.dataCenter}.gigya.com/${endpoint}`;
 
         // Fire request.
         let response;
         try {
-            response = await this.http<R>(uri, requestParams);
+            response = await this.httpRequest<R>(endpoint, dataCenter, requestParams);
 
             // Check for error codes that signal need to retry.
-            if (retryOnAnyError && response.errorCode !== 0
+            if (response.errorCode !== 0
                 || (
                     (response.errorCode === ErrorCode.GENERAL_SERVER_ERROR
                         || response.errorCode === ErrorCode.SEARCH_TIMED_OUT
@@ -120,20 +159,20 @@ export class Gigya {
         } catch (e) {
             // Retry.
             retries++;
-            if (retries > 10) {
+            if (retries > Gigya.RETRY_LIMIT) {
                 throw e;
             }
-            if (retryDelay) {
-                await sleep(retryDelay);
+            if (Gigya.RETRY_DELAY) {
+                await sleep(Gigya.RETRY_DELAY);
             }
-            return this.request<R>(endpoint, userParams, retries);
+            return this._request<R>(endpoint, userParams, retries);
         }
 
         // Check for rate limiting.
         if (response.errorCode === ErrorCode.RATE_LIMIT_HIT) {
             // Try again after waiting.
-            await sleep(Gigya._RATE_LIMIT_SLEEP);
-            return this.request<R>(endpoint, userParams, retries);
+            await sleep(Gigya.RATE_LIMIT_SLEEP);
+            return this._request<R>(endpoint, userParams, retries);
         }
 
         // Ensure Gigya returned successful response. If not, throw error with details.
@@ -150,31 +189,9 @@ export class Gigya {
     }
 
     /**
-     * Make HTTP request.
-     */
-    protected http<R>(uri: string, params: any): Promise<GigyaResponse & R> {
-        return new Promise<GigyaResponse & R>((resolve, reject) => {
-            request.post(uri, {
-                method: 'post',
-                form: params,
-                ca: this.certificate
-            }, (error, response, body) => {
-                if (error) {
-                    reject(error);
-                }
-                try {
-                    resolve(JSON.parse(body));
-                } catch (ex) {
-                    reject(ex);
-                }
-            });
-        });
-    }
-
-    /**
      * Create GigyaError from response.
      */
-    protected createErrorFromResponse(response: GigyaResponse, endpoint: string, params: Object): GigyaError {
+    protected createErrorFromResponse(response: GigyaResponse, endpoint: string, params: BaseParams & Object): GigyaError {
         // Create meaningful error message.
         let errorMessage = `Gigya API ${endpoint} failed with error code ${response.errorCode}`;
         const errorDetails = response.errorDetails ? response.errorDetails : response.errorMessage;

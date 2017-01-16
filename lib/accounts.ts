@@ -8,7 +8,18 @@ import TargetEnv from './interfaces/target-env';
 import SessionExpiration from './interfaces/session-expiration';
 import Counter from './interfaces/counter';
 import Profile from './interfaces/profile';
-import ScreenSet from './interfaces/screen-set';
+import BaseParams from './interfaces/base-params';
+
+export * from './rba';
+export * from './accounts.webhooks';
+export * from './interfaces/account';
+export * from './interfaces/session-info';
+export * from './interfaces/gigya-response';
+export * from './interfaces/target-env';
+export * from './interfaces/session-expiration';
+export * from './interfaces/counter';
+export * from './interfaces/profile';
+export * from './interfaces/base-params';
 
 export class Accounts {
     public readonly rba: RBA;
@@ -24,7 +35,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.deleteAccount+REST
      */
-    public deleteAccount(params: AccountsDeleteAccountParams) {
+    public deleteAccount(params: BaseParams & AccountsDeleteAccountParams) {
         return this.gigya.request('accounts.deleteAccount', params);
     }
 
@@ -33,7 +44,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.deleteScreenSet+REST
      */
-    public deleteScreenSet(params: AccountsDeleteScreenSetParams) {
+    public deleteScreenSet(params: BaseParams & AccountsDeleteScreenSetParams) {
         return this.gigya.request('accounts.deleteScreenSet', params);
     }
 
@@ -42,7 +53,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.exchangeUIDSignature+REST
      */
-    public exchangeUIDSignature(params: AccountsExchangeUIDSignatureParams) {
+    public exchangeUIDSignature(params: BaseParams & AccountsExchangeUIDSignatureParams) {
         return this.gigya.request<AccountsExchangeUIDSignatureResponse>('accounts.exchangeUIDSignature', params);
     }
 
@@ -51,7 +62,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.finalizeRegistration+REST
      */
-    public finalizeRegistration(params: AccountsFinalizeRegistrationParams) {
+    public finalizeRegistration(params: BaseParams & AccountsFinalizeRegistrationParams) {
         return this.gigya.request<Account & SessionInfo>('accounts.finalizeRegistration', params);
     }
 
@@ -60,7 +71,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getAccountInfo+REST
      */
-    public getAccountInfo(params: AccountsGetAccountInfoParams) {
+    public getAccountInfo(params: BaseParams & AccountsGetAccountInfoParams) {
         return this.gigya.request<Account>('accounts.getAccountInfo', params);
     }
 
@@ -69,7 +80,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getConflictingAccount+REST
      */
-    public getConflictingAccount(params: AccountsGetConflictingAccountParams) {
+    public getConflictingAccount(params: BaseParams & AccountsGetConflictingAccountParams) {
         return this.gigya.request<AccountsGetConflictingAccountResponse>('accounts.getConflictingAccount', params);
     }
 
@@ -78,7 +89,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getCounters+REST
      */
-    public getCounters(params: AccountsGetCountersParams) {
+    public getCounters(params: BaseParams & AccountsGetCountersParams) {
         return this.gigya.request<AccountsGetCountersResponse>('accounts.getCounters', params);
     }
 
@@ -87,7 +98,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getJWTPublicKey+REST
      */
-    public getJWTPublicKey() {
+    public getJWTPublicKey(params: BaseParams) {
         return this.gigya.request<AccountsGetJWTPublicKeyResponse>('accounts.getJWTPublicKey', {});
     }
 
@@ -96,7 +107,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getJWT+REST
      */
-    public getJWT(params: AccountsGetJWTParams) {
+    public getJWT(params: BaseParams & AccountsGetJWTParams) {
         return this.gigya.request<AccountsGetJWTResponse>('accounts.getJWT', params);
     }
 
@@ -105,7 +116,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getPolicies+REST
      */
-    public getPolicies(params: AccountsGetPoliciesParams) {
+    public getPolicies(params: BaseParams & AccountsGetPoliciesParams) {
         return this.gigya.request<AccountsGetPoliciesResponse>('accounts.getPolicies', params);
     }
 
@@ -114,7 +125,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getRegisteredCounters+REST
      */
-    public getRegisteredCounters() {
+    public getRegisteredCounters(params?: BaseParams) {
         return this.gigya.request<AccountsGetRegisteredCountersResponse>('accounts.getRegisteredCounters', {});
     }
 
@@ -132,8 +143,8 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getScreenSets+REST
      */
-    public getScreenSets(params?: GetScreenSetsParams) {
-        return this.gigya.request<GetScreenSetsResponse>('accounts.getScreenSets', params);
+    public getScreenSets(params?: AccountsGetScreenSetsParams) {
+        return this.gigya.request<AccountsGetScreenSetsResponse>('accounts.getScreenSets', params);
     }
 
     /**
@@ -141,7 +152,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.importProfilePhoto+REST
      */
-    public importProfilePhoto(params: AccountsImportProfilePhotoParams) {
+    public importProfilePhoto(params: BaseParams & AccountsImportProfilePhotoParams) {
         return this.gigya.request('accounts.importProfilePhoto', params);
     }
 
@@ -150,7 +161,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.incrementCounters+REST
      */
-    public incrementCounters(params: AccountsIncrementCountersParams) {
+    public incrementCounters(params: BaseParams & AccountsIncrementCountersParams) {
         return this.gigya.request('accounts.incrementCounters', params);
     }
 
@@ -159,7 +170,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.initRegistration+REST
      */
-    public initRegistration() {
+    public initRegistration(params?: BaseParams) {
         return this.gigya.request<AccountsInitRegistrationResponse>('accounts.initRegistration', {});
     }
 
@@ -168,7 +179,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.isAvailableLoginID+REST
      */
-    public isAvailableLoginID(params: AccountsIsAvailableLoginIDParams) {
+    public isAvailableLoginID(params: BaseParams & AccountsIsAvailableLoginIDParams) {
         return this.gigya.request<AccountsIsAvailableLoginIDResponse>('accounts.isAvailableLoginID', params);
     }
 
@@ -177,7 +188,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.linkAccounts+REST
      */
-    public linkAccounts(params: AccountsLinkAccountsParams) {
+    public linkAccounts(params: BaseParams & AccountsLinkAccountsParams) {
         return this.gigya.request<Account & SessionInfo>('accounts.linkAccounts', params);
     }
 
@@ -186,7 +197,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.login+REST
      */
-    public login(params: AccountsLoginParams) {
+    public login(params: BaseParams & AccountsLoginParams) {
         return this.gigya.request<Account & SessionInfo>('accounts.login', params);
     }
 
@@ -195,7 +206,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.logout+REST
      */
-    public logout(params: AccountsLogoutParams) {
+    public logout(params: BaseParams & AccountsLogoutParams) {
         return this.gigya.request<any>('accounts.logout', params);
     }
 
@@ -204,7 +215,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.notifyLogin+REST
      */
-    public notifyLogin(params: AccountsNotifyLoginParamsSiteUID | AccountsNotifyLoginParamsProviderSessions) {
+    public notifyLogin(params: BaseParams & AccountsNotifyLoginParamsSiteUID | AccountsNotifyLoginParamsProviderSessions) {
         return this.gigya.request<Account & SessionInfo>('accounts.notifyLogin', params);
     }
 
@@ -213,7 +224,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.publishProfilePhoto+REST
      */
-    public publishProfilePhoto(params: AccountsPublishProfilePhotoParams) {
+    public publishProfilePhoto(params: BaseParams & AccountsPublishProfilePhotoParams) {
         return this.gigya.request('accounts.publishProfilePhoto', params);
     }
 
@@ -222,7 +233,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.registerCounters+REST
      */
-    public registerCounters(params: AccountsRegisterCountersParams) {
+    public registerCounters(params: BaseParams & AccountsRegisterCountersParams) {
         return this.gigya.request('accounts.registerCounters', params);
     }
 
@@ -231,7 +242,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.register+REST
      */
-    public register(params: AccountsRegisterParams) {
+    public register(params: BaseParams & AccountsRegisterParams) {
         return this.gigya.request<Account & SessionInfo>('accounts.register', params);
     }
 
@@ -240,7 +251,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.resendVerificationCode+REST
      */
-    public resendVerificationCode(params: AccountsResendVerificationCodeParams) {
+    public resendVerificationCode(params: BaseParams & AccountsResendVerificationCodeParams) {
         return this.gigya.request('accounts.resendVerificationCode', params);
     }
 
@@ -249,7 +260,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.resetPassword+REST
      */
-    public resetPassword(params: AccountsResetPasswordParams) {
+    public resetPassword(params: BaseParams & AccountsResetPasswordParams) {
         return this.gigya.request<AccountsResetPasswordResponse>('accounts.resetPassword', params);
     }
 
@@ -258,7 +269,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.search+REST
      */
-    public search(params: AccountsSearchParams) {
+    public search(params: BaseParams & AccountsSearchParams) {
         return this.gigya.request<AccountsSearchResponse>('accounts.search', params);
     }
 
@@ -267,7 +278,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.setAccountInfo+REST
      */
-    public setAccountInfo(params: AccountsSetAccountInfoParams) {
+    public setAccountInfo(params: BaseParams & AccountsSetAccountInfoParams) {
         return this.gigya.request('accounts.setAccountInfo', params);
     }
 
@@ -276,7 +287,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.setPolicies+REST
      */
-    public setPolicies(params: AccountsSetPoliciesParams) {
+    public setPolicies(params: BaseParams & AccountsSetPoliciesParams) {
         return this.gigya.request('accounts.setPolicies', params);
     }
 
@@ -285,7 +296,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.setProfilePhoto+REST
      */
-    public setProfilePhoto(params: AccountsSetProfilePhotoParams) {
+    public setProfilePhoto(params: BaseParams & AccountsSetProfilePhotoParams) {
         return this.gigya.request('accounts.setProfilePhoto', params);
     }
 
@@ -294,7 +305,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.setSchema+REST
      */
-    public setSchema(params: AccountsSetSchemaParams) {
+    public setSchema(params: BaseParams & AccountsSetSchemaParams) {
         return this.gigya.request('accounts.setSchema', params);
     }
 
@@ -303,7 +314,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.setScreenSet+REST
      */
-    public setScreenSet(params: ScreenSet) {
+    public setScreenSet(params: BaseParams & AccountsSetScreenSetParams) {
         return this.gigya.request('accounts.setScreenSet', params);
     }
 
@@ -312,7 +323,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.unregisterCounters+REST
      */
-    public unregisterCounters(params: AccountsUnregisterCountersParams) {
+    public unregisterCounters(params: BaseParams & AccountsUnregisterCountersParams) {
         return this.gigya.request('accounts.unregisterCounters', params);
     }
 }
@@ -480,10 +491,90 @@ export interface AccountsGetPoliciesResponse {
     };
 }
 
-export type DeepPartial<T> = {
-    [P in keyof T]?: Partial<T[P]>;
-};
-export type AccountsSetPoliciesParams = DeepPartial<AccountsGetPoliciesResponse>;
+export type AccountsSetPoliciesParams = {
+    accountOptions?: {
+        verifyEmail?: boolean;
+        verifyProviderEmail?: boolean;
+        allowUnverifiedLogin?: boolean;
+        loginIdentifiers?: string;
+        defaultLanguage?: string;
+        loginIdentifierConflict?: 'ignore' | 'failOnSiteConflictingIdentity' | 'failOnAnyConflictingIdentity';
+        preventLoginIDHarvesting?: boolean;
+        sendAccountDeletedEmail?: boolean;
+        sendWelcomeEmail?: boolean;
+        welcomeEmailTemplates?: { [key: string]: string; };
+    };
+    emailNotifications?: {
+        confirmationEmailTemplates?: { [key: string]: string; };
+        accountDeletedEmailTemplates?: { [key: string]: string; };
+        accountDeletedEmailDefaultLanguage?: string;
+        confirmationEmailDefaultLanguage?: string;
+    };
+    emailVerification?: {
+        autoLogin?: boolean;
+        nextURL?: string;
+        nextURLMapping?: { [key: string]: string; };
+        verificationEmailExpiration?: number;
+        defaultLanguage?: string;
+        emailTemplates?: { [key: string]: string; };
+    };
+    gigyaPlugins?: {
+        defaultRegScreenSet?: string;
+        defaultMobileRegScreenSet?: string;
+        sessionExpiration?: SessionExpiration;
+        rememberSessionExpiration?: SessionExpiration;
+    };
+    passwordComplexity?: {
+        minCharGroups?: number;
+        minLength?: number;
+        regExp?: string;
+    };
+    passwordReset?: {
+        requireSecurityCheck?: boolean;
+        securityFields?: Array<Array<string>>;
+        resetURL?: string;
+        tokenExpiration?: number;
+        defaultLanguage?: string;
+        emailTemplates?: { [key: string]: string; };
+        sendConfirmationEmail?: boolean;
+    };
+    profilePhoto?: {
+        thumbnailWidth?: number;
+        thumbnailHeight?: number;
+    };
+    registration?: {
+        requireCaptcha?: boolean;
+        requireSecurityQuestion?: boolean;
+        requireLoginID?: boolean;
+        enforceCoppa?: boolean;
+    };
+    security?: {
+        accountLockout?: {
+            failedLoginThreshold?: number;
+            lockoutTimeSec?: number;
+            failedLoginResetSec?: number;
+        };
+        captcha?: {
+            failedLoginThreshold?: number;
+        };
+        ipLockout?: {
+            hourlyFailedLoginThreshold?: number;
+            lockoutTimeSec?: number;
+        };
+        passwordChangeInterval?: number;
+        passwordHistorySize?: number;
+    };
+    twoFactorAuth?: {
+        providers?: Array<{
+            name?: string;
+            enabled?: boolean;
+            params?: { [key: string]: string; };
+        }>;
+    };
+    federation?: {
+        allowMultipleIdentities?: boolean;
+    };
+}
 
 export interface AccountsGetRegisteredCountersResponse {
     counters: Array<Counter>;
@@ -673,8 +764,8 @@ export interface AccountsProfileSetSchemaField {
 }
 export interface AccountsDataSetSchemaField extends AccountsProfileSetSchemaField {
     allowNull?: boolean;
-    encrypt?: AccountsSchemaEncrypt;
-    format?: string;
+    encrypt?: AccountsSchemaEncrypt | null;
+    format?: string | null;
     type?: AccountsSchemaType;
 }
 
@@ -702,12 +793,24 @@ export interface AccountsDataGetSchemaField extends AccountsProfileSetSchemaFiel
     type: AccountsSchemaType;
 }
 
-export interface GetScreenSetsParams {
+export interface ScreenSet {
+    screenSetID: string;
+    html: string;
+    css: string;
+    metadata: {
+        designerHtml?: string; // Set without designer HTML to disable UI Builder.
+        desc?: string;
+        targetEnv?: string;
+        lastModified?: string;
+        version?: number;
+    };
+}
+export interface AccountsGetScreenSetsParams {
     screenSetIDs?: string | Array<string>;
     include?: string;
 }
-export interface GetScreenSetsResponse {
-    screenSets: Array<Partial<ScreenSet>>;
+export interface AccountsGetScreenSetsResponse {
+    screenSets: Array<ScreenSet>;
 }
 
 export interface AccountsIsAvailableLoginIDParams {
@@ -715,6 +818,19 @@ export interface AccountsIsAvailableLoginIDParams {
 }
 export interface AccountsIsAvailableLoginIDResponse {
     isAvailable: boolean;
+}
+
+export interface AccountsSetScreenSetParams {
+    screenSetID: string;
+    html: string;
+    css: string;
+    metadata?: {
+        designerHtml?: string; // Set without designer HTML to disable UI Builder.
+        desc?: string;
+        targetEnv?: string;
+        lastModified?: string;
+        version?: number;
+    };
 }
 
 export interface AccountsUnregisterCountersParams {

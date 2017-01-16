@@ -1,8 +1,15 @@
 import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
+import BaseParams from './interfaces/base-params';
 import Gender from './interfaces/gender';
 import TargetEnv from './interfaces/target-env';
 import SessionExpiration from './interfaces/session-expiration';
+
+export * from './interfaces/gigya-response';
+export * from './interfaces/base-params';
+export * from './interfaces/gender';
+export * from './interfaces/target-env';
+export * from './interfaces/session-expiration';
 
 export class Socialize {
     constructor(protected gigya: Gigya) {
@@ -13,7 +20,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.deleteAccount+REST
      */
-    public deleteAccount(params: any) {
+    public deleteAccount(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.deleteAccount', params);
     }
 
@@ -22,7 +29,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.delUserSettings+REST
      */
-    public delUserSettings(params: any) {
+    public delUserSettings(params: BaseParams & any) {
         return this.gigya.request('socialize.delUserSettings', params);
     }
 
@@ -31,7 +38,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.exchangeUIDSignature+REST
      */
-    public exchangeUIDSignature(params: any) {
+    public exchangeUIDSignature(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.exchangeUIDSignature', params);
     }
     
@@ -40,7 +47,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.facebookGraphOperation+REST
      */
-    public facebookGraphOperation(params: any) {
+    public facebookGraphOperation(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.facebookGraphOperation ', params);
     }
 
@@ -49,7 +56,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.getContacts+REST
      */
-    public getContacts(params: any) {
+    public getContacts(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.getContacts', params);
     }
 
@@ -58,7 +65,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.getFriendsInfo+REST
      */
-    public getFriendsInfo(params: any) {
+    public getFriendsInfo(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.getFriendsInfo', params);
     }
 
@@ -67,7 +74,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.getRawData+REST
      */
-    public getRawData(params: any) {
+    public getRawData(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.getRawData', params);
     }
 
@@ -76,7 +83,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.getReactionsCount+REST
      */
-    public getReactionsCount(params: any) {
+    public getReactionsCount(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.getReactionsCount', params);
     }
 
@@ -85,7 +92,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.getSessionInfo+REST
      */
-    public getSessionInfo(params: any) {
+    public getSessionInfo(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.getSessionInfo', params);
     }
 
@@ -94,7 +101,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.getTopShares+REST
      */
-    public getTopShares(params: any) {
+    public getTopShares(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.getTopShares', params);
     }
 
@@ -103,7 +110,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.getUserInfo+REST
      */
-    public getUserInfo(params: any) {
+    public getUserInfo(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.getUserInfo', params);
     }
 
@@ -112,7 +119,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.getUserSettings+REST
      */
-    public getUserSettings(params: any) {
+    public getUserSettings(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.getUserSettings', params);
     }
 
@@ -121,7 +128,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.importIdentities+REST
      */
-    public importIdentities(params: any) {
+    public importIdentities(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.importIdentities', params);
     }
 
@@ -130,7 +137,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.incrementReactionsCount+REST
      */
-    public incrementReactionsCount(params: any) {
+    public incrementReactionsCount(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.incrementReactionsCount', params);
     }
 
@@ -139,7 +146,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.logout+REST
      */
-    public logout(params: any) {
+    public logout(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.logout', params);
     }
 
@@ -148,8 +155,8 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.notifyLogin+REST
      */
-    public notifyLogin(params: NotifyLoginParamsSiteUID | NotifyLoginParamsProviderSessions) {
-        return this.gigya.request<NotifyLoginResponse>('socialize.notifyLogin', params);
+    public notifyLogin(params: BaseParams & (SocializeNotifyLoginParamsSiteUID | SocializeNotifyLoginParamsProviderSessions)) {
+        return this.gigya.request<SocializeNotifyLoginResponse>('socialize.notifyLogin', params);
     }
 
     /**
@@ -157,7 +164,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.notifyRegistration+REST
      */
-    public notifyRegistration(params: any) {
+    public notifyRegistration(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.notifyRegistration', params);
     }
 
@@ -166,7 +173,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.publishUserAction+REST
      */
-    public publishUserAction(params: any) {
+    public publishUserAction(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.publishUserAction', params);
     }
 
@@ -175,7 +182,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.removeConnection+REST
      */
-    public removeConnection(params: any) {
+    public removeConnection(params: BaseParams & any) {
         return this.gigya.request('socialize.removeConnection', params);
     }
 
@@ -184,7 +191,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.setStatus+REST
      */
-    public setStatus(params: any) {
+    public setStatus(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.setStatus', params);
     }
 
@@ -193,7 +200,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.setUID+REST
      */
-    public setUID(params: any) {
+    public setUID(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.setUID', params);
     }
 
@@ -202,7 +209,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.setUserInfo+REST
      */
-    public setUserInfo(params: any) {
+    public setUserInfo(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.setUserInfo', params);
     }
 
@@ -211,7 +218,7 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.setUserSettings+REST
      */
-    public setUserSettings(params: any) {
+    public setUserSettings(params: BaseParams & any) {
         return this.gigya.request<any>('socialize.setUserSettings', params);
     }
 
@@ -220,12 +227,12 @@ export class Socialize {
      * 
      * @see http://developers.gigya.com/display/GD/socialize.shortenURL+REST
      */
-    public shortenURL(params: ShortenURLParams) {
-        return this.gigya.request<ShortenURLResponse>('socialize.shortenURL', params);
+    public shortenURL(params: BaseParams & SocializeShortenURLParams) {
+        return this.gigya.request<SocializeShortenURLResponse>('socialize.shortenURL', params);
     }
 }
 
-export interface NotifyLoginParamsBase {
+export interface SocializeNotifyLoginParamsBase {
     siteUID?: string;
     providerSessions?: { [key: string]: any; };
     actionAttributes?: { [key: string]: string; };
@@ -244,14 +251,14 @@ export interface NotifyLoginParamsBase {
         age?: number;
     }
 }
-export interface NotifyLoginParamsSiteUID extends NotifyLoginParamsBase {
+export interface SocializeNotifyLoginParamsSiteUID extends SocializeNotifyLoginParamsBase {
     siteUID: string;
 }
-export interface NotifyLoginParamsProviderSessions extends NotifyLoginParamsBase {
+export interface SocializeNotifyLoginParamsProviderSessions extends SocializeNotifyLoginParamsBase {
     providerSessions: { [key: string]: any; };
 }
 
-export interface NotifyLoginResponse {
+export interface SocializeNotifyLoginResponse {
     UID: string;
     UIDSignature: string;
     signatureTimestamp: string;
@@ -270,12 +277,12 @@ export interface NotifyLoginResponse {
     regToken?: string;
 }
 
-export interface ShortenURLParams {
+export interface SocializeShortenURLParams {
     url: string;
     cid?: string;
 }
 
-export interface ShortenURLResponse {
+export interface SocializeShortenURLResponse {
     shortURL: string;
 }
 

@@ -1,6 +1,11 @@
 import Gigya from './gigya';
-import GigyaResponse from './interfaces/gigya-response';
 import IdP from './fidm.saml.idp';
+import GigyaResponse from './interfaces/gigya-response';
+import BaseParams from './interfaces/base-params';
+
+export * from './fidm.saml.idp';
+export * from './interfaces/gigya-response';
+export * from './interfaces/base-params';
 
 export class SAML {
     public readonly idp: IdP;
@@ -14,7 +19,7 @@ export class SAML {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.saml.delIdP+REST
      */
-    public delIdP(params: any) {
+    public delIdP(params: BaseParams & any) {
         return this.gigya.request('fidm.saml.delIdP', params);
     }
 
@@ -23,7 +28,7 @@ export class SAML {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.saml.getConfig+REST
      */
-    public getConfig(params: any) {
+    public getConfig(params: BaseParams & any) {
         return this.gigya.request<any>('fidm.saml.getConfig', params);
     }
 
@@ -32,7 +37,7 @@ export class SAML {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.saml.getRegisteredIdPs+REST
      */
-    public getRegisteredIdPs(params: any) {
+    public getRegisteredIdPs(params: BaseParams & any) {
         return this.gigya.request<any>('fidm.saml.getRegisteredIdPs', params);
     }
 
@@ -41,7 +46,7 @@ export class SAML {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.saml.importIdPMetadata+REST
      */
-    public importIdPMetadata(params: any) {
+    public importIdPMetadata(params: BaseParams & any) {
         return this.gigya.request<any>('fidm.saml.importIdPMetadata', params);
     }
 
@@ -50,7 +55,7 @@ export class SAML {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.saml.registerIdP+REST
      */
-    public registerIdP(params: any) {
+    public registerIdP(params: BaseParams & any) {
         return this.gigya.request('fidm.saml.registerIdP', params);
     }
 
@@ -59,7 +64,7 @@ export class SAML {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.saml.setConfig+REST
      */
-    public setConfig(params: any) {
+    public setConfig(params: BaseParams & any) {
         return this.gigya.request('fidm.saml.setConfig', params);
     }
 }

@@ -3,6 +3,10 @@ import GigyaResponse from './interfaces/gigya-response';
 import OIDC from './fidm.oidc';
 import SAML from './fidm.saml';
 
+export * from './interfaces/gigya-response';
+export * from './fidm.oidc';
+export * from './fidm.saml';
+
 export class FIDM {
     public readonly oidc: OIDC;
     public readonly saml: SAML;

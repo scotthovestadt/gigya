@@ -9,7 +9,7 @@ Unofficial Gigya JavaScript REST SDK
 
 
 ##Support and Usage
-This is an unofficial SDK for Gigya's REST API. It is not an officially supported product. Use at your own risk.
+This is an *unofficial* SDK for Gigya's REST API. Please do not contact Gigya support with questions or concerns about this SDK. For any issues, please make an issue on GitHub.
 
 ##Installation
 Gigya is listed on NPM. To install, run the following command within your project folder:
@@ -38,6 +38,11 @@ const gigya = new Gigya('YOUR_API_KEY', 'YOUR_DATA_CENTER', 'YOUR_SECRET');
 
 // Initialize SDK with your API Key, User Key, and User Secret.
 const gigya = new Gigya('YOUR_API_KEY', 'YOUR_DATA_CENTER', 'YOUR_USER_KEY', 'YOUR_USER_SECRET');
+
+// or:
+
+// Initialize without keys and pass to each method.
+const gigya = new Gigya();
 
 // Fetch user's account.
 // Returns a Promise. Promise is thrown on error.

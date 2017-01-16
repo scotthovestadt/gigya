@@ -1,5 +1,9 @@
 import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
+import BaseParams from './interfaces/base-params';
+
+export * from './interfaces/gigya-response';
+export * from './interfaces/base-params';
 
 export class OP {
     constructor(protected gigya: Gigya) {
@@ -10,7 +14,7 @@ export class OP {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.clearConfig+REST
      */
-    public clearConfig(params: any) {
+    public clearConfig(params: BaseParams & any) {
         return this.gigya.request('fidm.oidc.op.clearConfig', params);
     }
 
@@ -19,7 +23,7 @@ export class OP {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.createRP+REST
      */
-    public createRP(params: any) {
+    public createRP(params: BaseParams & any) {
         return this.gigya.request('fidm.oidc.op.createRP', params);
     }
 
@@ -28,7 +32,7 @@ export class OP {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.delRP+REST
      */
-    public delRP(params: any) {
+    public delRP(params: BaseParams & any) {
         return this.gigya.request('fidm.oidc.op.delRP', params);
     }
 
@@ -37,7 +41,7 @@ export class OP {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.getConfig+REST
      */
-    public getConfig(params: any) {
+    public getConfig(params: BaseParams & any) {
         return this.gigya.request('fidm.oidc.op.getConfig', params);
     }
 
@@ -46,7 +50,7 @@ export class OP {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.getRP+REST
      */
-    public getRP(params: any) {
+    public getRP(params: BaseParams & any) {
         return this.gigya.request('fidm.oidc.op.getRP', params);
     }
 
@@ -55,7 +59,7 @@ export class OP {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.getRPs+REST
      */
-    public getRPs(params: any) {
+    public getRPs(params: BaseParams & any) {
         return this.gigya.request('fidm.oidc.op.getRPs', params);
     }
 
@@ -64,7 +68,7 @@ export class OP {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.setConfig+REST
      */
-    public setConfig(params: any) {
+    public setConfig(params: BaseParams & any) {
         return this.gigya.request('fidm.oidc.op.setConfig', params);
     }
 
@@ -73,7 +77,7 @@ export class OP {
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.updateRP+REST
      */
-    public updateRP(params: any) {
+    public updateRP(params: BaseParams & any) {
         return this.gigya.request('fidm.oidc.op.updateRP', params);
     }
 }

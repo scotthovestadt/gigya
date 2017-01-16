@@ -1,5 +1,9 @@
 import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
+import BaseParams from './interfaces/base-params';
+
+export * from './interfaces/gigya-response';
+export * from './interfaces/base-params';
 
 export class DS {
     constructor(protected gigya: Gigya) {
@@ -10,7 +14,7 @@ export class DS {
      * 
      * @see http://developers.gigya.com/display/GD/ds.delete+REST
      */
-    public delete(params: DSDeleteParams) {
+    public delete(params: BaseParams & DSDeleteParams) {
         return this.gigya.request('ds.delete', params);
     }
 
@@ -19,7 +23,7 @@ export class DS {
      * 
      * @see http://developers.gigya.com/display/GD/ds.get+REST
      */
-    public get(params: DSGetParams) {
+    public get(params: BaseParams & DSGetParams) {
         return this.gigya.request<DSObject>('ds.get', params);
     }
 
@@ -28,7 +32,7 @@ export class DS {
      * 
      * @see http://developers.gigya.com/display/GD/ds.getSchema+REST
      */
-    public getSchema(params: any) {
+    public getSchema(params: BaseParams & any) {
         return this.gigya.request<any>('ds.getSchema', params);
     }
 
@@ -37,7 +41,7 @@ export class DS {
      * 
      * @see http://developers.gigya.com/display/GD/ds.search+REST
      */
-    public search(params: DSSearchParams) {
+    public search(params: BaseParams & DSSearchParams) {
         return this.gigya.request<DSSearchResponse>('ds.search', params);
     }
 
@@ -46,7 +50,7 @@ export class DS {
      * 
      * @see http://developers.gigya.com/display/GD/ds.setSchema+REST
      */
-    public setSchema(params: any) {
+    public setSchema(params: BaseParams & any) {
         return this.gigya.request('ds.setSchema', params);
     }
 
@@ -55,7 +59,7 @@ export class DS {
      * 
      * @see http://developers.gigya.com/display/GD/ds.store+REST
      */
-    public store(params: DSStoreParams) {
+    public store(params: BaseParams & DSStoreParams) {
         return this.gigya.request<DSStoreResponse>('ds.setSchema', params);
     }
 }

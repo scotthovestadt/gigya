@@ -1,5 +1,9 @@
 import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
+import BaseParams from './interfaces/base-params';
+
+export * from './interfaces/gigya-response';
+export * from './interfaces/base-params';
 
 export class Reports {
     constructor(protected gigya: Gigya) {
@@ -10,7 +14,7 @@ export class Reports {
      * 
      * @see http://developers.gigya.com/display/GD/reports.getAccountsStats+REST
      */
-    public getAccountsStats(params: any) {
+    public getAccountsStats(params: BaseParams & any) {
         return this.gigya.request<any>('reports.getAccountsStats', params);
     }
 
@@ -19,7 +23,7 @@ export class Reports {
      * 
      * @see http://developers.gigya.com/display/GD/reports.getCommentsStats+REST
      */
-    public getCommentsStats(params: any) {
+    public getCommentsStats(params: BaseParams & any) {
         return this.gigya.request<any>('reports.getCommentsStats', params);
     }
 
@@ -28,7 +32,7 @@ export class Reports {
      * 
      * @see http://developers.gigya.com/display/GD/reports.getGMRedeemablePoints+REST
      */
-    public getGMRedeemablePoints(params: any) {
+    public getGMRedeemablePoints(params: BaseParams & any) {
         return this.gigya.request<any>('reports.getGMRedeemablePoints', params);
     }
 
@@ -37,7 +41,7 @@ export class Reports {
      * 
      * @see http://developers.gigya.com/display/GD/reports.getGMStats+REST
      */
-    public getGMStats(params: any) {
+    public getGMStats(params: BaseParams & any) {
         return this.gigya.request<any>('reports.getGMStats', params);
     }
 
@@ -46,7 +50,7 @@ export class Reports {
      * 
      * @see http://developers.gigya.com/display/GD/reports.getGMTopUsers+REST
      */
-    public getGMTopUsers(params: any) {
+    public getGMTopUsers(params: BaseParams & any) {
         return this.gigya.request<any>('reports.getGMTopUsers', params);
     }
 
@@ -55,7 +59,7 @@ export class Reports {
      * 
      * @see http://developers.gigya.com/display/GD/reports.getGMUserStats+REST
      */
-    public getGMUserStats(params: any) {
+    public getGMUserStats(params: BaseParams & any) {
         return this.gigya.request<any>('reports.getGMUserStats', params);
     }
 
@@ -64,7 +68,7 @@ export class Reports {
      * 
      * @see http://developers.gigya.com/display/GD/reports.getIRank+REST
      */
-    public getIRank(params: any) {
+    public getIRank(params: BaseParams & any) {
         return this.gigya.request<any>('reports.getIRank', params);
     }
 
@@ -73,7 +77,7 @@ export class Reports {
      * 
      * @see http://developers.gigya.com/display/GD/reports.getReactionsStats+REST
      */
-    public getReactionsStats(params: any) {
+    public getReactionsStats(params: BaseParams & any) {
         return this.gigya.request<any>('reports.getReactionsStats', params);
     }
 
@@ -82,7 +86,7 @@ export class Reports {
      * 
      * @see http://developers.gigya.com/display/GD/reports.getSocializeStats+REST
      */
-    public getSocializeStats(params: any) {
+    public getSocializeStats(params: BaseParams & any) {
         return this.gigya.request<any>('reports.getSocializeStats', params);
     }
 }

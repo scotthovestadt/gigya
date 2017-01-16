@@ -1,5 +1,9 @@
 import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
+import BaseParams from './interfaces/base-params';
+
+export * from './interfaces/gigya-response';
+export * from './interfaces/base-params';
 
 export class RBA {
     constructor(protected gigya: Gigya) {
@@ -10,7 +14,7 @@ export class RBA {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.rba.getPolicy
      */
-    public getPolicy(params: any) {
+    public getPolicy(params: BaseParams & any) {
         return this.gigya.request<any>('accounts.rba.getPolicy', params);
     }
 
@@ -19,7 +23,7 @@ export class RBA {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.rba.setPolicy
      */
-    public setPolicy(params: any) {
+    public setPolicy(params: BaseParams & any) {
         return this.gigya.request<any>('accounts.rba.setPolicy', params);
     }
 
@@ -28,7 +32,7 @@ export class RBA {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.rba.unlock
      */
-    public unlock(params: any) {
+    public unlock(params: BaseParams & any) {
         return this.gigya.request<any>('accounts.rba.unlock', params);
     }
 }

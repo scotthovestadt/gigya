@@ -1,5 +1,9 @@
 import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
+import BaseParams from './interfaces/base-params';
+
+export * from './interfaces/gigya-response';
+export * from './interfaces/base-params';
 
 export class GM {
     constructor(protected gigya: Gigya) {
@@ -10,7 +14,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.deleteAction+REST
      */
-    public deleteAction(params: any) {
+    public deleteAction(params: BaseParams & any) {
         return this.gigya.request('gm.deleteAction', params);
     }
 
@@ -19,7 +23,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.deleteChallenge+REST
      */
-    public deleteChallenge(params: any) {
+    public deleteChallenge(params: BaseParams & any) {
         return this.gigya.request<any>('gm.deleteChallenge', params);
     }
 
@@ -28,7 +32,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.deleteChallengeVariant+REST
      */
-    public deleteChallengeVariant(params: any) {
+    public deleteChallengeVariant(params: BaseParams & any) {
         return this.gigya.request('gm.deleteChallengeVariant', params);
     }
 
@@ -37,7 +41,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.getActionConfig+REST
      */
-    public getActionConfig(params: any) {
+    public getActionConfig(params: BaseParams & any) {
         return this.gigya.request<any>('gm.getActionConfig', params);
     }
 
@@ -46,7 +50,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.getActionsLog+REST
      */
-    public getActionsLog(params: any) {
+    public getActionsLog(params: BaseParams & any) {
         return this.gigya.request<any>('gm.getActionsLog', params);
     }
 
@@ -55,7 +59,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.getChallengeConfig+REST
      */
-    public getChallengeConfig(params: any) {
+    public getChallengeConfig(params: BaseParams & any) {
         return this.gigya.request<any>('gm.getChallengeConfig', params);
     }
 
@@ -64,7 +68,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.getChallengeStatus+REST
      */
-    public getChallengeStatus(params: any) {
+    public getChallengeStatus(params: BaseParams & any) {
         return this.gigya.request<any>('gm.getChallengeStatus', params);
     }
 
@@ -73,7 +77,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.getChallengeVariants+REST
      */
-    public getChallengeVariants(params: any) {
+    public getChallengeVariants(params: BaseParams & any) {
         return this.gigya.request<any>('gm.getChallengeVariants', params);
     }
 
@@ -82,7 +86,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.getGlobalConfig+REST
      */
-    public getGlobalConfig(params: any) {
+    public getGlobalConfig(params: BaseParams & any) {
         return this.gigya.request<any>('gm.getGlobalConfig', params);
     }
 
@@ -91,7 +95,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.getTopUsers+REST
      */
-    public getTopUsers(params: any) {
+    public getTopUsers(params: BaseParams & any) {
         return this.gigya.request<any>('gm.getTopUsers', params);
     }
 
@@ -100,7 +104,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.notifyAction+REST
      */
-    public notifyAction(params: any) {
+    public notifyAction(params: BaseParams & any) {
         return this.gigya.request('gm.notifyAction', params);
     }
 
@@ -109,7 +113,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.redeemPoints+REST
      */
-    public redeemPoints(params: any) {
+    public redeemPoints(params: BaseParams & any) {
         return this.gigya.request('gm.redeemPoints', params);
     }
 
@@ -118,7 +122,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.resetLevelStatus+REST
      */
-    public resetLevelStatus(params: any) {
+    public resetLevelStatus(params: BaseParams & any) {
         return this.gigya.request('gm.resetLevelStatus', params);
     }
 
@@ -127,7 +131,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.setActionConfig+REST
      */
-    public setActionConfig(params: any) {
+    public setActionConfig(params: BaseParams & any) {
         return this.gigya.request('gm.setActionConfig', params);
     }
 
@@ -136,7 +140,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.setChallengeConfig+REST
      */
-    public setChallengeConfig(params: any) {
+    public setChallengeConfig(params: BaseParams & any) {
         return this.gigya.request('gm.setChallengeConfig', params);
     }
 
@@ -145,7 +149,7 @@ export class GM {
      * 
      * @see http://developers.gigya.com/display/GD/gm.setGlobalConfig+REST
      */
-    public setGlobalConfig(params: any) {
+    public setGlobalConfig(params: BaseParams & any) {
         return this.gigya.request('gm.setGlobalConfig', params);
     }
 }
