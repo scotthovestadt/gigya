@@ -88,20 +88,31 @@ export interface AdminGetEffectiveACLResponse {
 }
 
 export interface AdminServices {
-    gm: {
+    gm?: {
         enabled: boolean;
     };
-    comments: {
+    comments?: {
         enabled: boolean;
     };
-    accounts: {
+    accounts?: {
+        enabled: boolean;
+        features: Array<string>;
+    };
+    audit?: {
+        enabled: boolean;
+    }
+    ds?: {
         enabled: boolean;
     };
-    ds: {
+    ids?: {
         enabled: boolean;
     };
-    ids: {
+    samlIdp?: {
         enabled: boolean;
+    };
+    nexus?: {
+        enabled: boolean;
+        features: Array<string>;
     };
     defaultDBSize: string;
     defaultDataCenter: string;
@@ -142,7 +153,8 @@ export interface AdminGetUserSitesResponse {
 export interface AdminGetSiteConfigParams {
     apiKey: string;
     includeServices?: boolean;
-    includeSiteGroupsConfig?: boolean;
+    includeSiteGroupConfig?: boolean;
+    includeSiteID?: boolean;
     explicitSiteGroupConfig?: boolean;
     explicitSiteConfig?: boolean;
     includeGigyaSettings?: boolean;
@@ -153,6 +165,7 @@ export interface AdminGetSiteConfigResponse {
     trustedSiteURLs: Array<string>;
     description: string;
     services: AdminServices;
+    siteID: number;
     gigyaSettings: {
         enableRequestLoggingUntil: string;
         dsSize: string;
@@ -168,14 +181,19 @@ export interface AdminGetSiteConfigResponse {
         enableSSO: boolean;
         members: Array<string>;
     };
+    siteGroupOwner?: string;
+    enableDataSharing: boolean;
     trustedShareURLs: Array<string>;
+    logoutURL?: string;
 }
 
 export interface AdminSetSiteConfigParams {
+    apiKey: string;
     baseDomain?: string;
     dataCenter?: string;
     trustedSiteURL?: Array<string>;
     description?: string;
+    logoutURL?: string;
     services?: {
         gm?: {
             enabled: boolean;
@@ -185,12 +203,23 @@ export interface AdminSetSiteConfigParams {
         };
         accounts?: {
             enabled: boolean;
+            features: Array<string>;
         };
+        audit?: {
+            enabled: boolean;
+        }
         ds?: {
             enabled: boolean;
         };
         ids?: {
             enabled: boolean;
+        };
+        samlIdp?: {
+            enabled: boolean;
+        };
+        nexus?: {
+            enabled: boolean;
+            features: Array<string>;
         };
         defaultDBSize?: string;
         defaultDataCenter?: string;
