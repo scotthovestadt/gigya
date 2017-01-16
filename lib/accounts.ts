@@ -749,10 +749,10 @@ export type AccountsSchemaType = 'integer' | 'long' | 'float' | 'basic-string' |
 export type AccountsSchemaEncrypt = 'AES' | '';
 export interface AccountsSetSchemaParams {
     profileSchema?: {
-        fields: { [key: string]: AccountsProfileSetSchemaField | null; }
+        fields: { [key: string]: AccountsProfileSetSchemaField; }
     };
     dataSchema?: {
-        fields: { [key: string]: AccountsDataSetSchemaField | null; };
+        fields: { [key: string]: AccountsDataSetSchemaField; };
         dynamicSchema?: boolean;
     }
     scope?: 'group' | 'site';
