@@ -176,7 +176,29 @@ export interface AdminSetSiteConfigParams {
     dataCenter?: string;
     trustedSiteURL?: Array<string>;
     description?: string;
-    services?: Partial<AdminServices>;
+    services?: {
+        gm?: {
+            enabled: boolean;
+        };
+        comments?: {
+            enabled: boolean;
+        };
+        accounts?: {
+            enabled: boolean;
+        };
+        ds?: {
+            enabled: boolean;
+        };
+        ids?: {
+            enabled: boolean;
+        };
+        defaultDBSize?: string;
+        defaultDataCenter?: string;
+        customData?: {
+            websiteURL?: string;
+            companyName?: string;
+        };
+    }
     gigyaSettings?: {
         enableRequestLoggingUntil?: string;
         dsSize?: string;

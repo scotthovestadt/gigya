@@ -1,16 +1,20 @@
 import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
-import OP from './fidm.oidc.op';
+import FidmOidcOp from './fidm.oidc.op';
+import FidmOidcRp from './fidm.oidc.rp';
 
 export * from './interfaces/gigya-response';
 export * from './fidm.oidc.op';
+export * from './fidm.oidc.rp';
 
-export class OIDC {
-    public readonly op: OP;
+export class FidmOidc {
+    public readonly op: FidmOidcOp;
+    public readonly rp: FidmOidcRp;
 
     constructor(protected gigya: Gigya) {
-        this.op = new OP(gigya);
+        this.op = new FidmOidcOp(gigya);
+        this.rp = new FidmOidcRp(gigya);
     }
 }
 
-export default OIDC;
+export default FidmOidc;

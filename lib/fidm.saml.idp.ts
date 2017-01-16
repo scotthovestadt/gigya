@@ -5,7 +5,7 @@ import BaseParams from './interfaces/base-params';
 export * from './interfaces/gigya-response';
 export * from './interfaces/base-params';
 
-export class IdP {
+export class FidmSamlIdp {
     constructor(protected gigya: Gigya) {
     }
 
@@ -64,4 +64,4 @@ export class IdP {
     }
 }
 
-export default IdP;
+export default FidmSamlIdp;

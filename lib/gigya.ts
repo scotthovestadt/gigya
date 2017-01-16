@@ -6,7 +6,7 @@ import Socialize from './socialize';
 import Accounts from './accounts';
 import DS from './ds';
 import GM from './gm';
-import FIDM from './fidm';
+import Fidm from './fidm';
 import Reports from './reports';
 import GigyaError from './gigya-error';
 import GigyaResponse from './interfaces/gigya-response';
@@ -43,7 +43,7 @@ export class Gigya {
     public readonly accounts: Accounts;
     public readonly ds: DS;
     public readonly gm: GM;
-    public readonly fidm: FIDM;
+    public readonly fidm: Fidm;
     public readonly reports: Reports;
 
     /**
@@ -85,7 +85,7 @@ export class Gigya {
         this.accounts = new Accounts(this);
         this.ds = new DS(this);
         this.gm = new GM(this);
-        this.fidm = new FIDM(this);
+        this.fidm = new Fidm(this);
         this.reports = new Reports(this);
     }
 
@@ -94,7 +94,7 @@ export class Gigya {
      * 
      * If a method is not available, create an issue or pull request at: https://github.com/scotthovestadt/gigya
      */
-    public async request<R>(endpoint: string, userParams: any): Promise<GigyaResponse & R> {
+    public async request<R>(endpoint: string, userParams: any = {}): Promise<GigyaResponse & R> {
         return this._request<R>(endpoint, userParams);
     }
 

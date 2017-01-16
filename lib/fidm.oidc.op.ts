@@ -5,7 +5,7 @@ import BaseParams from './interfaces/base-params';
 export * from './interfaces/gigya-response';
 export * from './interfaces/base-params';
 
-export class OP {
+export class FidmOidcOp {
     constructor(protected gigya: Gigya) {
     }
 
@@ -19,7 +19,7 @@ export class OP {
     }
 
     /**
-     * This API registers and configures a new RP    for the OP .
+     * This API registers and configures a new RP for the OP.
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.createRP+REST
      */
@@ -37,7 +37,7 @@ export class OP {
     }
 
     /**
-     * This API retrieves the site OP  configuration relevant for all clients/relying-parties of the site.
+     * This API retrieves the site OP configuration relevant for all clients/relying-parties of the site.
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.getConfig+REST
      */
@@ -46,7 +46,7 @@ export class OP {
     }
 
     /**
-     * This API returns the configuration data for a specified RP .
+     * This API returns the configuration data for a specified RP.
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.getRP+REST
      */
@@ -55,7 +55,7 @@ export class OP {
     }
 
     /**
-     * This API Returns all the currently registered RPs  for the OP .
+     * This API Returns all the currently registered RPs for the OP.
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.getRPs+REST
      */
@@ -64,7 +64,7 @@ export class OP {
     }
 
     /**
-     * This API initiates the OP  functionality for your site. The configuration of the OP is relevant to all of the site's RPs .
+     * This API initiates the OP  functionality for your site. The configuration of the OP is relevant to all of the site's RPs.
      * 
      * @see http://developers.gigya.com/display/GD/fidm.oidc.op.setConfig+REST
      */
@@ -82,4 +82,4 @@ export class OP {
     }
 }
 
-export default OP;
+export default FidmOidcOp;

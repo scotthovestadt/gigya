@@ -1,20 +1,20 @@
 import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
-import OIDC from './fidm.oidc';
-import SAML from './fidm.saml';
+import FidmOidc from './fidm.oidc';
+import FidmSaml from './fidm.saml';
 
 export * from './interfaces/gigya-response';
 export * from './fidm.oidc';
 export * from './fidm.saml';
 
-export class FIDM {
-    public readonly oidc: OIDC;
-    public readonly saml: SAML;
+export class Fidm {
+    public readonly oidc: FidmOidc;
+    public readonly saml: FidmSaml;
 
     constructor(protected gigya: Gigya) {
-        this.oidc = new OIDC(gigya);
-        this.saml = new SAML(gigya);
+        this.oidc = new FidmOidc(gigya);
+        this.saml = new FidmSaml(gigya);
     }
 }
 
-export default FIDM;
+export default Fidm;

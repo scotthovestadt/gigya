@@ -1,5 +1,5 @@
 import Gigya from './gigya';
-import IdP from './fidm.saml.idp';
+import FidmSamlIdp from './fidm.saml.idp';
 import GigyaResponse from './interfaces/gigya-response';
 import BaseParams from './interfaces/base-params';
 
@@ -7,11 +7,11 @@ export * from './fidm.saml.idp';
 export * from './interfaces/gigya-response';
 export * from './interfaces/base-params';
 
-export class SAML {
-    public readonly idp: IdP;
+export class FidmSaml {
+    public readonly idp: FidmSamlIdp;
 
     constructor(protected gigya: Gigya) {
-        this.idp = new IdP(gigya);
+        this.idp = new FidmSamlIdp(gigya);
     }
 
     /**
@@ -69,4 +69,4 @@ export class SAML {
     }
 }
 
-export default SAML;
+export default FidmSaml;
