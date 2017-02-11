@@ -110,6 +110,8 @@ export class Gigya {
                 // Gigya wants arrays and objects stringified into JSON, eg Account profile and data objects.
                 if (value && (_.isObject(value) || _.isArray(value))) {
                     return JSON.stringify(value);
+                } else if (value === null) {
+                    return 'null';
                 } else {
                     return value;
                 }
