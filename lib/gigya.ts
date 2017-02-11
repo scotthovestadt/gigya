@@ -145,27 +145,22 @@ export class Gigya {
         try {
             response = await this.httpRequest<R>(endpoint, dataCenter, requestParams);
 
-            // Check for error codes that signal need to retry.
-            if (response.errorCode !== 0
-                || (
-                    (response.errorCode === ErrorCode.GENERAL_SERVER_ERROR
-                        || response.errorCode === ErrorCode.SEARCH_TIMED_OUT
-                        || response.errorCode === ErrorCode.CONCURRENT_UPDATES_NOT_ALLOWED
-                    )
-                )
-            ) {
+            // Non-zero error code means failure.
+            if (response.errorCode !== 0) {
                 throw this.createErrorFromResponse(response, endpoint, userParams);
             }
         } catch (e) {
-            // Retry.
-            retries++;
-            if (retries > Gigya.RETRY_LIMIT) {
-                throw e;
+            // Check for error codes that signal need to retry.
+            if (e.errorCode === ErrorCode.GENERAL_SERVER_ERROR || e.errorCode === ErrorCode.SEARCH_TIMED_OUT || e.errorCode === ErrorCode.CONCURRENT_UPDATES_NOT_ALLOWED) {
+                retries++;
+                if (retries < Gigya.RETRY_LIMIT) {
+                    if (Gigya.RETRY_DELAY) {
+                        await sleep(Gigya.RETRY_DELAY);
+                    }
+                    return this._request<R>(endpoint, userParams, retries);
+                }
             }
-            if (Gigya.RETRY_DELAY) {
-                await sleep(Gigya.RETRY_DELAY);
-            }
-            return this._request<R>(endpoint, userParams, retries);
+            throw e;
         }
 
         // Check for rate limiting.
