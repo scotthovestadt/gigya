@@ -10,6 +10,7 @@ export interface Account {
     isActive: boolean;
     profile: Profile;
     data: any;
+    subscriptions: any;
     iRank: number;
     loginIDs: {
         username: string;

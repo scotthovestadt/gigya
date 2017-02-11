@@ -141,7 +141,7 @@ export interface AdminUserSite {
 }
 export interface AdminGetUserSitesParams {
     targetUserKey?: string;
-    targetPartnerID?: string;
+    targetPartnerID?: number;
 }
 export interface AdminGetUserSitesResponse {
     sites: Array<{
@@ -158,6 +158,7 @@ export interface AdminGetSiteConfigParams {
     explicitSiteGroupConfig?: boolean;
     explicitSiteConfig?: boolean;
     includeGigyaSettings?: boolean;
+    includeGlobalConf?: boolean;
 }
 export interface AdminGetSiteConfigResponse {
     baseDomain: string;
@@ -178,13 +179,15 @@ export interface AdminGetSiteConfigResponse {
         shortURLRedirMethod: string;
     };
     siteGroupConfig: {
+        members?: Array<string>;
         enableSSO: boolean;
-        members: Array<string>;
+        SSOSegment: string; // It's always returned, but may be an empty string.
     };
     siteGroupOwner?: string;
     enableDataSharing: boolean;
     trustedShareURLs: Array<string>;
     logoutURL?: string;
+    globalConf?: string;
 }
 
 export interface AdminSetSiteConfigParams {
@@ -241,8 +244,12 @@ export interface AdminSetSiteConfigParams {
     };
     siteGroupConfig?: {
         enableSSO?: boolean;
+        SSOSegment?: string;
     };
+    siteGroupOwner?: string | null;
+    enableDataSharing?: boolean;
     trustedShareURLs?: Array<string>;
+    globalConf?: string;
 }
 
 export interface AdminSearchParams {

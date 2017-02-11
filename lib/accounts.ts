@@ -586,6 +586,7 @@ export interface AccountsSetAccountInfoParams {
     addLoginEmails?: string;
     conflictHandling?: 'fail' | 'saveProfileAndFail';
     data?: any;
+    subscriptions?: any;
     isActive?: boolean;
     isLockedOut?: boolean;
     isVerified?: boolean;
@@ -652,6 +653,7 @@ export interface AccountsRegisterParams {
     captchaToken?: string;
     cid?: string;
     data?: any;
+    subscriptions?: any;
     finalizeRegistration?: boolean;
     secretQuestion?: string;
     secretAnswer?: string;
@@ -754,7 +756,10 @@ export interface AccountsSetSchemaParams {
     dataSchema?: {
         fields: { [key: string]: AccountsDataSetSchemaField; };
         dynamicSchema?: boolean;
-    }
+    };
+    subscriptionSchema?: {
+        fields: { [key: string]: AccountsSubscriptionSetSchemaField; };
+    };
     scope?: 'group' | 'site';
 }
 export interface AccountsProfileSetSchemaField {
@@ -767,6 +772,9 @@ export interface AccountsDataSetSchemaField extends AccountsProfileSetSchemaFiel
     encrypt?: AccountsSchemaEncrypt | null;
     format?: string | null;
     type?: AccountsSchemaType;
+}
+export interface AccountsSubscriptionSetSchemaField {
+    type?: 'boolean';
 }
 
 export interface AccountsGetSchemaParams {
