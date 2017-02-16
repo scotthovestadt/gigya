@@ -12,10 +12,12 @@ function getCertificate(): string {
     return certificate;
 }
 
-export const httpRequest: ProxyHttpRequest = <R>(endpoint: string, dataCenter: any, requestParams: any) => {
+/**
+ * Make HTTP request to Gigya.
+ */
+export const httpRequest: ProxyHttpRequest = <R>(endpoint: string, host: string, requestParams: any) => {
     return new Promise<GigyaResponse & R>((resolve, reject) => {
-        const namespace = endpoint.substring(0, endpoint.indexOf('.'));
-        const uri = `https://${namespace}.${dataCenter}.gigya.com/${endpoint}`;
+        const uri = `https://${host}/${endpoint}`;
         request.post(uri, {
             method: 'post',
             form: requestParams,

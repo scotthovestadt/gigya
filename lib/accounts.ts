@@ -148,6 +148,15 @@ export class Accounts {
     }
 
     /**
+     * This method imports user account data into the Accounts Storage.
+     * 
+     * @see http://developers.gigya.com/display/GD/accounts.importAccount+REST
+     */
+    public importAccount(params: BaseParams & AccountsImportAccountParams) {
+        return this.gigya.request<AccountsImportAccountResponse>('accounts.importAccount', params);
+    }
+
+    /**
      * This method imports a user's profile photo to Gigya's server.
      * 
      * @see http://developers.gigya.com/display/GD/accounts.importProfilePhoto+REST
@@ -215,7 +224,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.notifyLogin+REST
      */
-    public notifyLogin(params: BaseParams & AccountsNotifyLoginParamsSiteUID | AccountsNotifyLoginParamsProviderSessions) {
+    public notifyLogin(params: BaseParams & (AccountsNotifyLoginParamsSiteUID | AccountsNotifyLoginParamsProviderSessions)) {
         return this.gigya.request<Account & SessionInfo>('accounts.notifyLogin', params);
     }
 
@@ -607,6 +616,37 @@ export interface AccountsSetAccountInfoParams {
     regSource?: string;
 }
 
+export interface AccountsImportAccountParams {
+    UID: string;
+    username?: string;
+    email?: string;
+    secretQuestion?: string;
+    secretAnswer?: string;
+    profile?: Profile;
+    data?: any;
+    lang?: string;
+    skipVerification?: boolean;
+    finalizeRegistration?: boolean;
+    created?: string;
+    lastUpdated?: string;
+    isActive?: boolean;
+    regSource?: string;
+    lastLogin?: string;
+    compoundHashedPassword?: string;
+    hashedPassword?: string;
+    pwHashAlgorithm?: string;
+    pwHashFormat?: string;
+    pwHashBinaryFormat?: string;
+    pwHashSalt?: string;
+    pwHashRounds?: string;
+    url?: string;
+}
+
+export interface AccountsImportAccountResponse {
+    identityConflicts: Array<any>;
+    isImported: boolean;
+}
+
 export interface AccountsImportProfilePhotoParams {
     url: string;
     UID?: string;
@@ -738,6 +778,7 @@ export interface AccountsNotifyLoginParams {
     cid?: string;
     targetEnv?: TargetEnv;
     regSource?: string;
+    sessionExpiration?: SessionExpiration;
 }
 export interface AccountsNotifyLoginParamsSiteUID extends AccountsNotifyLoginParams {
     siteUID: string;

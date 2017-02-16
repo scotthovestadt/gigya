@@ -10,6 +10,15 @@ export class Admin {
     }
 
     /**
+     * This method creates a new site.
+     * 
+     * @see http://developers.gigya.com/display/GD/admin.createSite+REST
+     */
+    public createSite(params: BaseParamsSite & AdminCreateSiteParams) {
+        return this.gigya.request<AdminCreateSiteResponse>('admin.createSite', params);
+    }
+
+    /**
      * This API retrieves a partner's previously-saved ACL and its description, or a built-in ACL.
      * 
      * @see http://developers.gigya.com/display/GD/admin.getACL+REST
@@ -55,22 +64,32 @@ export class Admin {
     }
 
     /**
-     * This API retrieves a partner's previously-saved ACL and its description, or a built-in ACL.
+     * This method sets the configuration for existing sites.
      * 
-     * @see http://developers.gigya.com/display/GD/admin.getACL+REST
+     * @see http://developers.gigya.com/display/GD/admin.setSiteConfig+REST
      */
     public setSiteConfig(params: BaseParamsSite & AdminSetSiteConfigParams) {
         return this.gigya.request('admin.setSiteConfig', params);
     }
 }
 
+export interface AdminCreateSiteParams {
+    partnerID: number | string;
+    baseDomain: string;
+    description?: string;
+    dataCenter?: string;
+}
+export interface AdminCreateSiteResponse {
+    apiKey: string;
+}
+
 export interface AdminGetEffectiveACLTargetUserKeyParams {
-    partnerID: string;
+    partnerID: number | string;
     targetUserKey: string;
     apiKey?: string;
 }
 export interface AdminGetEffectiveACLGroupIDsParams {
-    partnerID: string;
+    partnerID: number | string;
     groupIds: string;
     apiKey?: string;
 }
@@ -123,13 +142,19 @@ export interface AdminServices {
     secretKey: string;
 };
 export interface AdminGetPartnerParams {
-    partnerID: string;
+    partnerID: number | string;
 }
 export interface AdminGetPartnerResponse {
     partnerID: number;
     isTrial: boolean;
     isEnabled: boolean;
     services: AdminServices;
+    defaultDataCenter: string;
+    customData: {
+        websiteURL: string;
+        companyName: string;
+    };
+    secretKey: string;
 }
 
 export interface AdminUserSite {

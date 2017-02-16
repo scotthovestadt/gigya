@@ -8,6 +8,7 @@ import DS from './ds';
 import GM from './gm';
 import Fidm from './fidm';
 import Reports from './reports';
+import IDX from './idx';
 import GigyaError from './gigya-error';
 import GigyaResponse from './interfaces/gigya-response';
 import ErrorCode from './interfaces/error-code';
@@ -22,6 +23,7 @@ export * from './ds';
 export * from './gm';
 export * from './fidm';
 export * from './reports';
+export * from './idx';
 export * from './gigya-error';
 export * from './interfaces/gigya-response';
 export * from './interfaces/error-code';
@@ -45,6 +47,7 @@ export class Gigya {
     public readonly gm: GM;
     public readonly fidm: Fidm;
     public readonly reports: Reports;
+    public readonly idx: IDX;
 
     /**
      * Initialize new instance of Gigya.
@@ -87,6 +90,7 @@ export class Gigya {
         this.gm = new GM(this);
         this.fidm = new Fidm(this);
         this.reports = new Reports(this);
+        this.idx = new IDX(this);
     }
 
     /**
@@ -102,15 +106,18 @@ export class Gigya {
      * Internal handler for requests.
      */
     protected async _request<R>(endpoint: string, userParams: BaseParams & { [key: string]: any; }, retries = 0): Promise<GigyaResponse & R> {
+        // Data center can be passed as a "param" but shouldn't be sent to the server.
         const dataCenter = userParams.dataCenter || this.dataCenter || 'us1';
+        delete userParams.dataCenter;
 
         // Create final set of params with defaults, credentials, and params.
         const requestParams: { [key: string]: string | null | number | boolean; } = _.assignIn(
             _.mapValues(userParams, (value: any) => {
-                // Gigya wants arrays and objects stringified into JSON, eg Account profile and data objects.
                 if (value && (_.isObject(value) || _.isArray(value))) {
+                    // Gigya wants arrays and objects stringified into JSON, eg Account profile and data objects.
                     return JSON.stringify(value);
                 } else if (value === null) {
+                    // Null is meaningful in some contexts. Ensure it is passed.
                     return 'null';
                 } else {
                     return value;
@@ -145,7 +152,12 @@ export class Gigya {
         // Fire request.
         let response;
         try {
-            response = await this.httpRequest<R>(endpoint, dataCenter, requestParams);
+            // Host is constructed from the endpoint namespace and data center.
+            // Endpoint "accounts.getAccountInfo" and data center "us1" become "accounts.us1.gigya.com".
+            const namespace = endpoint.substring(0, endpoint.indexOf('.'));
+            const host = `${namespace}.${dataCenter}.gigya.com`;
+
+            response = await this.httpRequest<R>(endpoint, host, requestParams);
 
             // Non-zero error code means failure.
             if (response.errorCode !== 0) {
@@ -153,7 +165,9 @@ export class Gigya {
             }
         } catch (e) {
             // Check for error codes that signal need to retry.
-            if (e.errorCode === ErrorCode.GENERAL_SERVER_ERROR || e.errorCode === ErrorCode.SEARCH_TIMED_OUT || e.errorCode === ErrorCode.CONCURRENT_UPDATES_NOT_ALLOWED) {
+            if (e.errorCode === ErrorCode.GENERAL_SERVER_ERROR
+                || e.errorCode === ErrorCode.SEARCH_TIMED_OUT
+                || e.errorCode === ErrorCode.CONCURRENT_UPDATES_NOT_ALLOWED) {
                 retries++;
                 if (retries < Gigya.RETRY_LIMIT) {
                     if (Gigya.RETRY_DELAY) {
