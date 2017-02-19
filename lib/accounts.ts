@@ -798,7 +798,7 @@ export interface AccountsSetSchemaParams {
         fields: { [key: string]: AccountsDataSetSchemaField; };
         dynamicSchema?: boolean;
     };
-    subscriptionSchema?: {
+    subscriptionsSchema?: {
         fields: { [key: string]: AccountsSubscriptionSetSchemaField; };
     };
     scope?: 'group' | 'site';
