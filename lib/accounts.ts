@@ -814,7 +814,7 @@ export interface AccountsDataSetSchemaField extends AccountsProfileSetSchemaFiel
     format?: string | null;
     type?: AccountsSchemaType;
 }
-export interface AccountsSubscriptionSetSchemaField {
+export interface AccountsSubscriptionSetSchemaField extends AccountsProfileSetSchemaField {
     type?: 'boolean';
 }
 
