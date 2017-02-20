@@ -828,7 +828,10 @@ export interface AccountsGetSchemaResponse {
     };
     dataSchema: {
         fields: { [key: string]: AccountsGetSchemaField; };
-    }
+    };
+    subscriptionsSchema: {
+        fields: { [key: string]: AccountsGetSchemaField; };
+    };
 }
 export interface AccountsGetSchemaField {
     type: AccountsSchemaType;
