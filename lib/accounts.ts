@@ -98,7 +98,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getJWTPublicKey+REST
      */
-    public getJWTPublicKey(params: BaseParams) {
+    public getJWTPublicKey(params?: BaseParams) {
         return this.gigya.request<AccountsGetJWTPublicKeyResponse>('accounts.getJWTPublicKey', {});
     }
 
@@ -815,7 +815,6 @@ export interface AccountsDataSetSchemaField extends AccountsProfileSetSchemaFiel
     type?: AccountsSchemaType;
 }
 export interface AccountsSubscriptionSetSchemaField extends AccountsProfileSetSchemaField {
-    type?: 'boolean';
 }
 
 export interface AccountsGetSchemaParams {
@@ -846,6 +845,7 @@ export interface ScreenSet {
     screenSetID: string;
     html: string;
     css: string;
+    javascript?: string;
     metadata: {
         designerHtml?: string; // Set without designer HTML to disable UI Builder.
         desc?: string;
@@ -873,6 +873,7 @@ export interface AccountsSetScreenSetParams {
     screenSetID: string;
     html: string;
     css: string;
+    javascript?: string;
     metadata?: {
         designerHtml?: string; // Set without designer HTML to disable UI Builder.
         desc?: string;
