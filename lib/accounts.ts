@@ -846,6 +846,11 @@ export interface ScreenSet {
     html: string;
     css: string;
     javascript?: string;
+    translations?: {
+        [languageCode: string]: {
+            [translationKey: string]: string;
+        }
+    };
     metadata: {
         designerHtml?: string; // Set without designer HTML to disable UI Builder.
         desc?: string;
@@ -874,6 +879,11 @@ export interface AccountsSetScreenSetParams {
     html: string;
     css: string;
     javascript?: string;
+    translations?: {
+        [languageCode: string]: {
+            [translationKey: string]: string;
+        }
+    };
     metadata?: {
         designerHtml?: string; // Set without designer HTML to disable UI Builder.
         desc?: string;
