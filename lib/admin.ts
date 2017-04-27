@@ -71,6 +71,15 @@ export class Admin {
     public setSiteConfig(params: BaseParamsSite & AdminSetSiteConfigParams) {
         return this.gigya.request('admin.setSiteConfig', params);
     }
+
+    /**
+     * This method deletes an exisiting site by API key
+     *
+     * @see http://developers.gigya.com/display/GD/admin.deleteSite+REST
+     */
+    public deleteSite(params: BaseParamsSite & AdminDeleteSiteParams) {
+        return this.gigya.request('admin.deleteSite', params);
+    }
 }
 
 export interface AdminCreateSiteParams {
@@ -286,6 +295,14 @@ export interface AdminSearchResponse {
         companyName: string;
         isTrial: boolean;
     }>;
+}
+
+export interface AdminDeleteSiteParams{
+    targetApiKey : string;
+    deleteToken?  : string;
+    format?  : string;
+    callback?  : string;
+    httpStatusCodes?  : boolean;
 }
 
 export default Admin;
