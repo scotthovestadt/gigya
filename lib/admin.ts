@@ -140,6 +140,12 @@ export interface AdminServices {
         companyName: string;
     };
     secretKey: string;
+    liteAccount? : {
+        enabled: boolean;
+    };
+    subscriptions? : {
+        enabled: boolean;
+	};
 };
 export interface AdminGetPartnerParams {
     partnerID: number | string;
