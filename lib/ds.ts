@@ -60,7 +60,7 @@ export class DS {
      * @see http://developers.gigya.com/display/GD/ds.store+REST
      */
     public store(params: BaseParams & DSStoreParams) {
-        return this.gigya.request<DSStoreResponse>('ds.setSchema', params);
+        return this.gigya.request<DSStoreResponse>('ds.store', params);
     }
 }
 
