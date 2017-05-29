@@ -815,12 +815,13 @@ export interface AccountsDataSetSchemaField extends AccountsProfileSetSchemaFiel
     type?: AccountsSchemaType;
 }
 export interface AccountsSubscriptionSetSchemaField extends AccountsProfileSetSchemaField {
-    type?: 'boolean';
+    type?: AccountsSchemaType;
 }
 
 export interface AccountsGetSchemaParams {
     filter?: 'full' | 'explicitOnly' | 'clientOnly';
     scope?: 'effective' | 'group' | 'site';
+    internalSchema?: boolean;
 }
 export interface AccountsGetSchemaResponse {
     profileSchema: {
