@@ -98,7 +98,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getJWTPublicKey+REST
      */
-    public getJWTPublicKey(params: BaseParams) {
+    public getJWTPublicKey(params?: BaseParams) {
         return this.gigya.request<AccountsGetJWTPublicKeyResponse>('accounts.getJWTPublicKey', {});
     }
 
@@ -134,7 +134,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getSchema+REST
      */
-    public getSchema(params?: AccountsGetSchemaParams) {
+    public getSchema(params?: BaseParams & AccountsGetSchemaParams) {
         return this.gigya.request<AccountsGetSchemaResponse>('accounts.getSchema', params);
     }
 
@@ -143,7 +143,7 @@ export class Accounts {
      * 
      * @see http://developers.gigya.com/display/GD/accounts.getScreenSets+REST
      */
-    public getScreenSets(params?: AccountsGetScreenSetsParams) {
+    public getScreenSets(params?: BaseParams & AccountsGetScreenSetsParams) {
         return this.gigya.request<AccountsGetScreenSetsResponse>('accounts.getScreenSets', params);
     }
 
@@ -847,6 +847,12 @@ export interface ScreenSet {
     screenSetID: string;
     html: string;
     css: string;
+    javascript?: string;
+    translations?: {
+        [languageCode: string]: {
+            [translationKey: string]: string;
+        }
+    };
     metadata: {
         designerHtml?: string; // Set without designer HTML to disable UI Builder.
         desc?: string;
@@ -874,6 +880,12 @@ export interface AccountsSetScreenSetParams {
     screenSetID: string;
     html: string;
     css: string;
+    javascript?: string;
+    translations?: {
+        [languageCode: string]: {
+            [translationKey: string]: string;
+        }
+    };
     metadata?: {
         designerHtml?: string; // Set without designer HTML to disable UI Builder.
         desc?: string;
