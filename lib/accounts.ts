@@ -336,6 +336,15 @@ export class Accounts {
     }
 
     /**
+     * This method performs a social login or social registration.
+     *
+     * @see http://developers.gigya.com/display/GD/accounts.socialLogin+REST
+     */
+    public socialLogin(params: BaseParams & AccountsSocialLoginParams) {
+        return this.gigya.request('accounts.socialLogin', params);
+    }
+
+    /**
      * This method unregisters counters.
      * 
      * @see http://developers.gigya.com/display/GD/accounts.unregisterCounters+REST
@@ -919,6 +928,28 @@ export interface AccountsSetScreenSetParams {
         targetEnv?: string;
         lastModified?: string;
     };
+}
+
+export interface AccountsSocialLoginParams {
+    x_provider: string;
+    redirect_uri: string;
+    response_type: string;
+    state: string;
+    x_cid: string;
+    x_conflictHandling: string;
+    x_displayMode: string;
+    x_extraPermissions: string;
+    x_forceAuthentication: boolean;
+    x_googlePlayAppID: string;
+    x_lang: string;
+    x_loginMode: string;
+    x_openIDProviderLogo: string;
+    x_openIDProviderName: string;
+    x_openIDURL: string;
+    x_openIDUsername: string;
+    x_regSource: string;
+    x_session_expiration: number;
+    x_temporary_account: boolean;
 }
 
 export interface AccountsUnregisterCountersParams {
