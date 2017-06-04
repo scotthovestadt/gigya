@@ -148,6 +148,14 @@ export class Accounts {
     }
 
     /**
+     * This method retrieves Screenset's versions.
+     *
+     */
+    public getScreenSetVersions(params?: BaseParams & AccountsGetScreenSetVersionsParams) {
+        return this.gigya.request<AccountsGetScreenSetVersionsResponse>('accounts.getScreenSetVersions', params);
+    }
+
+    /**
      * This method imports user account data into the Accounts Storage.
      * 
      * @see http://developers.gigya.com/display/GD/accounts.importAccount+REST
@@ -864,9 +872,27 @@ export interface ScreenSet {
 export interface AccountsGetScreenSetsParams {
     screenSetIDs?: string | Array<string>;
     include?: string;
+    version? : number;
 }
 export interface AccountsGetScreenSetsResponse {
     screenSets: Array<ScreenSet>;
+}
+
+export interface ScreenSetVersion {
+    version : number;
+    lastModified : number;
+    comment : string;
+    uiBuilderSupport : boolean;
+}
+
+export interface AccountsGetScreenSetVersionsParams {
+    screenSetID : string;
+    startVersion? : number;
+    count? : number;
+}
+
+export interface AccountsGetScreenSetVersionsResponse {
+    screenSetVersions : ScreenSetVersion[];
 }
 
 export interface AccountsIsAvailableLoginIDParams {
@@ -891,7 +917,7 @@ export interface AccountsSetScreenSetParams {
         desc?: string;
         targetEnv?: string;
         lastModified?: string;
-        version?: number;
+        comment? : string;
     };
 }
 
