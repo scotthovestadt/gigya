@@ -872,27 +872,27 @@ export interface ScreenSet {
 export interface AccountsGetScreenSetsParams {
     screenSetIDs?: string | Array<string>;
     include?: string;
-    version? : number;
+    version?: number;
 }
 export interface AccountsGetScreenSetsResponse {
     screenSets: Array<ScreenSet>;
 }
 
 export interface ScreenSetVersion {
-    version : number;
-    lastModified : number;
-    comment : string;
-    uiBuilderSupport : boolean;
+    version: number;
+    lastModified: number;
+    comment: string;
+    uiBuilderSupport: boolean;
 }
 
 export interface AccountsGetScreenSetVersionsParams {
-    screenSetID : string;
-    startVersion? : number;
-    count? : number;
+    screenSetID: string;
+    startVersion?: number;
+    count?: number;
 }
 
 export interface AccountsGetScreenSetVersionsResponse {
-    screenSetVersions : ScreenSetVersion[];
+    screenSetVersions: ScreenSetVersion[];
 }
 
 export interface AccountsIsAvailableLoginIDParams {
