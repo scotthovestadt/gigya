@@ -904,7 +904,7 @@ export interface AccountsIsAvailableLoginIDResponse {
 
 export interface AccountsSetScreenSetParams {
     screenSetID: string;
-    comment? : string;
+    comment: string;
     html: string;
     css: string;
     javascript?: string;
