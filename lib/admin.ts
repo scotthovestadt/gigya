@@ -228,6 +228,10 @@ export interface AdminGetSiteConfigResponse {
     trustedShareURLs: Array<string>;
     logoutURL?: string;
     globalConf?: string;
+    inivisibleRecaptcha?: {
+        siteKey? : string,
+        secret? : string
+    }
 }
 
 export interface AdminSetSiteConfigParams {
