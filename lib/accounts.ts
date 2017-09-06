@@ -815,7 +815,6 @@ export interface AccountsDataSetSchemaField extends AccountsProfileSetSchemaFiel
     type?: AccountsSchemaType;
 }
 export interface AccountsSubscriptionSetSchemaField extends AccountsProfileSetSchemaField {
-    type?: string;
     doubleOptIn? : boolean;
     description? : string | null;
 }
