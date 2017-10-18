@@ -800,14 +800,25 @@ export type AccountsSchemaType = 'integer' | 'long' | 'float' | 'basic-string' |
 export type AccountsSchemaEncrypt = 'AES' | '';
 export interface AccountsSetSchemaParams {
     profileSchema?: {
-        fields: { [key: string]: AccountsProfileSetSchemaField; }
+        fields: {
+            [key: string]: AccountsProfileSetSchemaField;
+        };
     };
     dataSchema?: {
-        fields: { [key: string]: AccountsDataSetSchemaField; };
+        fields: {
+            [key: string]: AccountsDataSetSchemaField;
+        };
         dynamicSchema?: boolean;
     };
     subscriptionsSchema?: {
-        fields: { [key: string]: AccountsSubscriptionSetSchemaField; };
+        fields: {
+            [key: string]: AccountsSubscriptionSetSchemaField;
+        };
+    };
+    preferencesSchema?: {
+        fields: {
+            [key: string]: AccountsPreferencesSetSchemaField;
+        };
     };
     scope?: 'group' | 'site';
 }
@@ -825,7 +836,9 @@ export interface AccountsDataSetSchemaField extends AccountsProfileSetSchemaFiel
 export interface AccountsSubscriptionSetSchemaField extends AccountsProfileSetSchemaField {
     type?: AccountsSchemaType;
 }
-
+export interface AccountsPreferencesSetSchemaField extends AccountsProfileSetSchemaField {
+    type?: 'consent';
+}
 export interface AccountsGetSchemaParams {
     filter?: 'full' | 'explicitOnly' | 'clientOnly';
     scope?: 'effective' | 'group' | 'site';
@@ -833,13 +846,24 @@ export interface AccountsGetSchemaParams {
 }
 export interface AccountsGetSchemaResponse {
     profileSchema: {
-        fields: { [key: string]: AccountsGetSchemaField; }
+        fields: {
+            [key: string]: AccountsGetSchemaField;
+        };
     };
     dataSchema: {
-        fields: { [key: string]: AccountsGetSchemaField; };
+        fields: {
+            [key: string]: AccountsGetSchemaField;
+        };
     };
     subscriptionsSchema: {
-        fields: { [key: string]: AccountsGetSchemaField; };
+        fields: {
+            [key: string]: AccountsGetSchemaField;
+        };
+    };
+    preferencesSchema: {
+        fields: {
+            [key: string]: AccountsPreferencesGetSchemaField;
+        };
     };
 }
 export interface AccountsGetSchemaField {
@@ -851,6 +875,13 @@ export interface AccountsGetSchemaField {
     encrypt?: AccountsSchemaEncrypt;
     format?: string;
 }
+export interface AccountsPreferencesGetSchemaField {
+    type: 'consent';
+    required: boolean;
+    writeAccess: AccountsSchemaWriteAccess;
+    format?: string;
+}
+
 export interface ScreenSet {
     screenSetID: string;
     html: string;
