@@ -838,6 +838,10 @@ export interface AccountsSubscriptionSetSchemaField extends AccountsProfileSetSc
 }
 export interface AccountsPreferencesSetSchemaField extends AccountsProfileSetSchemaField {
     type?: 'consent';
+    currentDocDate?: string;
+    minDocDate?: string;
+    currentDocVersion?: number;
+    minDocVersion?: number;
 }
 export interface AccountsGetSchemaParams {
     filter?: 'full' | 'explicitOnly' | 'clientOnly';
@@ -880,6 +884,10 @@ export interface AccountsPreferencesGetSchemaField {
     required: boolean;
     writeAccess: AccountsSchemaWriteAccess;
     format?: string;
+    currentDocDate?: string;
+    minDocDate?: string;
+    currentDocVersion?: number;
+    minDocVersion?: number;
 }
 
 export interface ScreenSet {
