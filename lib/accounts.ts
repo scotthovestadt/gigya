@@ -520,13 +520,13 @@ export type AccountsSetPoliciesParams = {
         sendAccountDeletedEmail?: boolean;
         sendWelcomeEmail?: boolean;
         welcomeEmailTemplates?: { [key: string]: string; };
-    };
+    } | null;
     emailNotifications?: {
         confirmationEmailTemplates?: { [key: string]: string; };
         accountDeletedEmailTemplates?: { [key: string]: string; };
         accountDeletedEmailDefaultLanguage?: string;
         confirmationEmailDefaultLanguage?: string;
-    };
+    } | null;
     emailVerification?: {
         autoLogin?: boolean;
         nextURL?: string;
@@ -534,18 +534,18 @@ export type AccountsSetPoliciesParams = {
         verificationEmailExpiration?: number;
         defaultLanguage?: string;
         emailTemplates?: { [key: string]: string; };
-    };
+    } | null;
     gigyaPlugins?: {
         defaultRegScreenSet?: string;
         defaultMobileRegScreenSet?: string;
         sessionExpiration?: SessionExpiration;
         rememberSessionExpiration?: SessionExpiration;
-    };
+    } | null;
     passwordComplexity?: {
         minCharGroups?: number;
         minLength?: number;
         regExp?: string;
-    };
+    } | null;
     passwordReset?: {
         requireSecurityCheck?: boolean;
         securityFields?: Array<Array<string>>;
@@ -554,17 +554,17 @@ export type AccountsSetPoliciesParams = {
         defaultLanguage?: string;
         emailTemplates?: { [key: string]: string; };
         sendConfirmationEmail?: boolean;
-    };
+    } | null;
     profilePhoto?: {
         thumbnailWidth?: number;
         thumbnailHeight?: number;
-    };
+    } | null;
     registration?: {
         requireCaptcha?: boolean;
         requireSecurityQuestion?: boolean;
         requireLoginID?: boolean;
         enforceCoppa?: boolean;
-    };
+    } | null;
     security?: {
         accountLockout?: {
             failedLoginThreshold?: number;
@@ -580,17 +580,17 @@ export type AccountsSetPoliciesParams = {
         };
         passwordChangeInterval?: number;
         passwordHistorySize?: number;
-    };
+    } | null;
     twoFactorAuth?: {
         providers?: Array<{
             name?: string;
             enabled?: boolean;
             params?: { [key: string]: string; };
         }>;
-    };
+    } | null;
     federation?: {
         allowMultipleIdentities?: boolean;
-    };
+    } | null;
 }
 
 export interface AccountsGetRegisteredCountersResponse {
