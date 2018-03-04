@@ -506,6 +506,12 @@ export interface AccountsGetPoliciesResponse {
     federation: {
         allowMultipleIdentities: boolean;
     };
+    doubleOptIn: {
+        nextURL: string;
+        defaultLanguage: string;
+        confirmationLinkExpiration: number;
+        confirmationEmailTemplates: { [key: string]: string; };
+    };
 }
 
 export type AccountsSetPoliciesParams = {
