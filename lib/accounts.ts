@@ -32,7 +32,7 @@ export class Accounts {
 
     /**
      * This method deletes the specified user's account from Gigya's database.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.deleteAccount+REST
      */
     public deleteAccount(params: BaseParams & AccountsDeleteAccountParams) {
@@ -40,8 +40,8 @@ export class Accounts {
     }
 
     /**
-     * This method deletes a screen-set hosted by Gigya. 
-     * 
+     * This method deletes a screen-set hosted by Gigya.
+     *
      * @see http://developers.gigya.com/display/GD/accounts.deleteScreenSet+REST
      */
     public deleteScreenSet(params: BaseParams & AccountsDeleteScreenSetParams) {
@@ -50,7 +50,7 @@ export class Accounts {
 
     /**
      * This method allows sites integrating 3rd party plugins to validate the UID of a logged-in user.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.exchangeUIDSignature+REST
      */
     public exchangeUIDSignature(params: BaseParams & AccountsExchangeUIDSignatureParams) {
@@ -59,7 +59,7 @@ export class Accounts {
 
     /**
      * This method completes on-site user registration.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.finalizeRegistration+REST
      */
     public finalizeRegistration(params: BaseParams & AccountsFinalizeRegistrationParams) {
@@ -68,7 +68,7 @@ export class Accounts {
 
     /**
      * This method retrieves user account data.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.getAccountInfo+REST
      */
     public getAccountInfo(params: BaseParams & AccountsGetAccountInfoParams) {
@@ -77,7 +77,7 @@ export class Accounts {
 
     /**
      * This method searches for a conflicting account: an account that uses the email associated with a social identity linked to the account currently logging in.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.getConflictingAccount+REST
      */
     public getConflictingAccount(params: BaseParams & AccountsGetConflictingAccountParams) {
@@ -86,7 +86,7 @@ export class Accounts {
 
     /**
      * This method retrieves the counters associated with a user ID (UID).
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.getCounters+REST
      */
     public getCounters(params: BaseParams & AccountsGetCountersParams) {
@@ -95,7 +95,7 @@ export class Accounts {
 
     /**
      * This API allows retrieval of the public key necessary for validating an id_token returned from the accounts.getJWT API endpoint.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.getJWTPublicKey+REST
      */
     public getJWTPublicKey(params?: BaseParams) {
@@ -104,7 +104,7 @@ export class Accounts {
 
     /**
      * This API is used to obtain an OAuth2.0/OIDC compatible id_token containing an existing user's data.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.getJWT+REST
      */
     public getJWT(params: BaseParams & AccountsGetJWTParams) {
@@ -113,7 +113,7 @@ export class Accounts {
 
     /**
      * This method retrieves account policies.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.getPolicies+REST
      */
     public getPolicies(params: BaseParams & AccountsGetPoliciesParams) {
@@ -122,7 +122,7 @@ export class Accounts {
 
     /**
      * This method returns the counters that were registered for the site using accounts.registerCounters.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.getRegisteredCounters+REST
      */
     public getRegisteredCounters(params?: BaseParams) {
@@ -131,7 +131,7 @@ export class Accounts {
 
     /**
      * This method retrieves the schema of the Profile object and the Data object (the site specific custom data object) in Gigya's Accounts Storage.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.getSchema+REST
      */
     public getSchema(params?: BaseParams & AccountsGetSchemaParams) {
@@ -140,7 +140,7 @@ export class Accounts {
 
     /**
      * This method retrieves one or more screen-sets hosted by Gigya.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.getScreenSets+REST
      */
     public getScreenSets(params?: BaseParams & AccountsGetScreenSetsParams) {
@@ -157,7 +157,7 @@ export class Accounts {
 
     /**
      * This method imports user account data into the Accounts Storage.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.importAccount+REST
      */
     public importAccount(params: BaseParams & AccountsImportAccountParams) {
@@ -166,7 +166,7 @@ export class Accounts {
 
     /**
      * This method imports a user's profile photo to Gigya's server.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.importProfilePhoto+REST
      */
     public importProfilePhoto(params: BaseParams & AccountsImportProfilePhotoParams) {
@@ -175,7 +175,7 @@ export class Accounts {
 
     /**
      * When creating a custom counter, you first register it using accounts.registerCounters, then increment it using the current method.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.incrementCounters+REST
      */
     public incrementCounters(params: BaseParams & AccountsIncrementCountersParams) {
@@ -184,7 +184,7 @@ export class Accounts {
 
     /**
      * This method initializes a registration process at a site.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.initRegistration+REST
      */
     public initRegistration(params?: BaseParams) {
@@ -193,7 +193,7 @@ export class Accounts {
 
     /**
      * This method checks whether a certain login identifier (username / email) is available.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.isAvailableLoginID+REST
      */
     public isAvailableLoginID(params: BaseParams & AccountsIsAvailableLoginIDParams) {
@@ -202,7 +202,7 @@ export class Accounts {
 
     /**
      * This method merges the account identified by the provided UID with the account identified by the provided login credentials (loginID + password).
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.linkAccounts+REST
      */
     public linkAccounts(params: BaseParams & AccountsLinkAccountsParams) {
@@ -211,7 +211,7 @@ export class Accounts {
 
     /**
      * This method logs a user into your site and opens a session for the logged-in user on success.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.login+REST
      */
     public login(params: BaseParams & AccountsLoginParams) {
@@ -220,7 +220,7 @@ export class Accounts {
 
     /**
      * This method logs out the specified user of your site.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.logout+REST
      */
     public logout(params: BaseParams & AccountsLogoutParams) {
@@ -229,7 +229,7 @@ export class Accounts {
 
     /**
      * This method notifies Gigya of an external login that happened outside of the Accounts system.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.notifyLogin+REST
      */
     public notifyLogin(params: BaseParams & (AccountsNotifyLoginParamsSiteUID | AccountsNotifyLoginParamsProviderSessions)) {
@@ -238,7 +238,7 @@ export class Accounts {
 
     /**
      * This method publishes the last imported profile photo if it hadn't been published previously.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.publishProfilePhoto+REST
      */
     public publishProfilePhoto(params: BaseParams & AccountsPublishProfilePhotoParams) {
@@ -247,7 +247,7 @@ export class Accounts {
 
     /**
      * When creating a custom counter, you first register it using this method, then increment it using accounts.incrementCounters.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.registerCounters+REST
      */
     public registerCounters(params: BaseParams & AccountsRegisterCountersParams) {
@@ -256,7 +256,7 @@ export class Accounts {
 
     /**
      * This method registers a new user at your site, in accordance with the predefined site Policies and the Schema of the Accounts Storage.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.register+REST
      */
     public register(params: BaseParams & AccountsRegisterParams) {
@@ -265,7 +265,7 @@ export class Accounts {
 
     /**
      * This method is used to resend a validation email to unverified addresses associated with the account.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.resendVerificationCode+REST
      */
     public resendVerificationCode(params: BaseParams & AccountsResendVerificationCodeParams) {
@@ -274,7 +274,7 @@ export class Accounts {
 
     /**
      * This method resets a user's password, either via email or directly.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.resetPassword+REST
      */
     public resetPassword(params: BaseParams & AccountsResetPasswordParams) {
@@ -283,7 +283,7 @@ export class Accounts {
 
     /**
      * Searches and retrieves data from Gigya's Accounts Storage using an SQL-like query.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.search+REST
      */
     public search(params: BaseParams & AccountsSearchParams) {
@@ -292,7 +292,7 @@ export class Accounts {
 
     /**
      * This method sets account data into a user's account.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.setAccountInfo+REST
      */
     public setAccountInfo(params: BaseParams & AccountsSetAccountInfoParams) {
@@ -301,7 +301,7 @@ export class Accounts {
 
     /**
      * This method is used to modify site policies regarding user registration and login.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.setPolicies+REST
      */
     public setPolicies(params: BaseParams & AccountsSetPoliciesParams) {
@@ -310,7 +310,7 @@ export class Accounts {
 
     /**
      * This method uploads a user's profile photo to Gigya's server.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.setProfilePhoto+REST
      */
     public setProfilePhoto(params: BaseParams & AccountsSetProfilePhotoParams) {
@@ -319,7 +319,7 @@ export class Accounts {
 
     /**
      * This method enables you to specify a schema for Gigya's Accounts Storage.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.setSchema+REST
      */
     public setSchema(params: BaseParams & AccountsSetSchemaParams) {
@@ -328,7 +328,7 @@ export class Accounts {
 
     /**
      * This method updates a screen-set hosted by Gigya, or creates it if it does not exist.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.setScreenSet+REST
      */
     public setScreenSet(params: BaseParams & AccountsSetScreenSetParams) {
@@ -337,7 +337,7 @@ export class Accounts {
 
     /**
      * This method unregisters counters.
-     * 
+     *
      * @see http://developers.gigya.com/display/GD/accounts.unregisterCounters+REST
      */
     public unregisterCounters(params: BaseParams & AccountsUnregisterCountersParams) {
@@ -596,6 +596,14 @@ export type AccountsSetPoliciesParams = {
     } | null;
     federation?: {
         allowMultipleIdentities?: boolean;
+    } | null;
+    doubleOptIn?: {
+        nextURL?: string;
+        defaultLanguage?: string;
+        confirmationLinkExpiration?: number;
+        confirmationEmailTemplates?: {
+            [key: string]: string;
+        };
     } | null;
 }
 
