@@ -80,6 +80,15 @@ export class Admin {
     public deleteSite(params: BaseParamsSite & AdminDeleteSiteParams) {
         return this.gigya.request('admin.deleteSite', params);
     }
+
+    /**
+     * This method updates an exisiting partner by partnerID
+     *
+     * @see https://developers.gigya.com/display/GD/admin.updatePartner+REST
+     */
+    public updatePartner(params : BaseParamsSite & AdminUpdatePartnerParams){
+        return this.gigya.request('admin.updatePartner', params);
+    }
 }
 
 export interface AdminCreateSiteParams {
@@ -170,6 +179,7 @@ export interface AdminGetPartnerResponse {
         companyName: string;
     };
     secretKey: string;
+    auditRetention : number | string
 }
 
 export interface AdminUserSite {
@@ -313,6 +323,18 @@ export interface AdminDeleteSiteParams{
     format?  : string;
     callback?  : string;
     httpStatusCodes?  : boolean;
+}
+
+export interface AdminUpdatePartnerParams{
+    partnerID : string;
+    defaultDataCenter?: string;
+    isEnabled?: boolean;
+    isMigratedToSoa?: boolean;
+    isTrial?: boolean;
+    tenantID?: string;
+    format?: string;
+    services?: AdminServices;
+    auditRetention? : string|number ;
 }
 
 export default Admin;
