@@ -148,6 +148,14 @@ export class Accounts {
     }
 
     /**
+     * This method retrieves Screenset's versions.
+     *
+     */
+    public getScreenSetVersions(params?: BaseParams & AccountsGetScreenSetVersionsParams) {
+        return this.gigya.request<AccountsGetScreenSetVersionsResponse>('accounts.getScreenSetVersions', params);
+    }
+
+    /**
      * This method imports user account data into the Accounts Storage.
      * 
      * @see http://developers.gigya.com/display/GD/accounts.importAccount+REST
@@ -498,6 +506,12 @@ export interface AccountsGetPoliciesResponse {
     federation: {
         allowMultipleIdentities: boolean;
     };
+    doubleOptIn: {
+        nextURL: string;
+        defaultLanguage: string;
+        confirmationLinkExpiration: number;
+        confirmationEmailTemplates: { [key: string]: string; };
+    };
 }
 
 export type AccountsSetPoliciesParams = {
@@ -512,13 +526,13 @@ export type AccountsSetPoliciesParams = {
         sendAccountDeletedEmail?: boolean;
         sendWelcomeEmail?: boolean;
         welcomeEmailTemplates?: { [key: string]: string; };
-    };
+    } | null;
     emailNotifications?: {
         confirmationEmailTemplates?: { [key: string]: string; };
         accountDeletedEmailTemplates?: { [key: string]: string; };
         accountDeletedEmailDefaultLanguage?: string;
         confirmationEmailDefaultLanguage?: string;
-    };
+    } | null;
     emailVerification?: {
         autoLogin?: boolean;
         nextURL?: string;
@@ -526,18 +540,18 @@ export type AccountsSetPoliciesParams = {
         verificationEmailExpiration?: number;
         defaultLanguage?: string;
         emailTemplates?: { [key: string]: string; };
-    };
+    } | null;
     gigyaPlugins?: {
         defaultRegScreenSet?: string;
         defaultMobileRegScreenSet?: string;
         sessionExpiration?: SessionExpiration;
         rememberSessionExpiration?: SessionExpiration;
-    };
+    } | null;
     passwordComplexity?: {
         minCharGroups?: number;
         minLength?: number;
         regExp?: string;
-    };
+    } | null;
     passwordReset?: {
         requireSecurityCheck?: boolean;
         securityFields?: Array<Array<string>>;
@@ -546,17 +560,17 @@ export type AccountsSetPoliciesParams = {
         defaultLanguage?: string;
         emailTemplates?: { [key: string]: string; };
         sendConfirmationEmail?: boolean;
-    };
+    } | null;
     profilePhoto?: {
         thumbnailWidth?: number;
         thumbnailHeight?: number;
-    };
+    } | null;
     registration?: {
         requireCaptcha?: boolean;
         requireSecurityQuestion?: boolean;
         requireLoginID?: boolean;
         enforceCoppa?: boolean;
-    };
+    } | null;
     security?: {
         accountLockout?: {
             failedLoginThreshold?: number;
@@ -572,17 +586,17 @@ export type AccountsSetPoliciesParams = {
         };
         passwordChangeInterval?: number;
         passwordHistorySize?: number;
-    };
+    } | null;
     twoFactorAuth?: {
         providers?: Array<{
             name?: string;
             enabled?: boolean;
             params?: { [key: string]: string; };
         }>;
-    };
+    } | null;
     federation?: {
         allowMultipleIdentities?: boolean;
-    };
+    } | null;
 }
 
 export interface AccountsGetRegisteredCountersResponse {
@@ -792,14 +806,25 @@ export type AccountsSchemaType = 'integer' | 'long' | 'float' | 'basic-string' |
 export type AccountsSchemaEncrypt = 'AES' | '';
 export interface AccountsSetSchemaParams {
     profileSchema?: {
-        fields: { [key: string]: AccountsProfileSetSchemaField; }
+        fields: {
+            [key: string]: AccountsProfileSetSchemaField;
+        };
     };
     dataSchema?: {
-        fields: { [key: string]: AccountsDataSetSchemaField; };
+        fields: {
+            [key: string]: AccountsDataSetSchemaField;
+        };
         dynamicSchema?: boolean;
     };
     subscriptionsSchema?: {
-        fields: { [key: string]: AccountsSubscriptionSetSchemaField; };
+        fields: {
+            [key: string]: AccountsSubscriptionSetSchemaField;
+        };
+    };
+    preferencesSchema?: {
+        fields: {
+            [key: string]: AccountsPreferencesSetSchemaField;
+        };
     };
     scope?: 'group' | 'site';
 }
@@ -817,21 +842,40 @@ export interface AccountsDataSetSchemaField extends AccountsProfileSetSchemaFiel
 export interface AccountsSubscriptionSetSchemaField extends AccountsProfileSetSchemaField {
     doubleOptIn? : boolean;
     description? : string | null;
+    type?: AccountsSchemaType;
 }
-
+export interface AccountsPreferencesSetSchemaField extends AccountsProfileSetSchemaField {
+    type?: 'consent';
+    currentDocDate?: string;
+    minDocDate?: string;
+    currentDocVersion?: number;
+    minDocVersion?: number;
+}
 export interface AccountsGetSchemaParams {
     filter?: 'full' | 'explicitOnly' | 'clientOnly';
     scope?: 'effective' | 'group' | 'site';
+    internalSchema?: boolean;
 }
 export interface AccountsGetSchemaResponse {
     profileSchema: {
-        fields: { [key: string]: AccountsGetSchemaField; }
+        fields: {
+            [key: string]: AccountsGetSchemaField;
+        };
     };
     dataSchema: {
-        fields: { [key: string]: AccountsGetSchemaField; };
+        fields: {
+            [key: string]: AccountsGetSchemaField;
+        };
     };
     subscriptionsSchema: {
-        fields: { [key: string]: AccountsGetSchemaField; };
+        fields: {
+            [key: string]: AccountsGetSchemaField;
+        };
+    };
+    preferencesSchema: {
+        fields: {
+            [key: string]: AccountsPreferencesGetSchemaField;
+        };
     };
 }
 export interface AccountsGetSchemaField {
@@ -843,6 +887,17 @@ export interface AccountsGetSchemaField {
     encrypt?: AccountsSchemaEncrypt;
     format?: string;
 }
+export interface AccountsPreferencesGetSchemaField {
+    type: 'consent';
+    required: boolean;
+    writeAccess: AccountsSchemaWriteAccess;
+    format?: string;
+    currentDocDate?: string;
+    minDocDate?: string;
+    currentDocVersion?: number;
+    minDocVersion?: number;
+}
+
 export interface ScreenSet {
     screenSetID: string;
     html: string;
@@ -864,9 +919,27 @@ export interface ScreenSet {
 export interface AccountsGetScreenSetsParams {
     screenSetIDs?: string | Array<string>;
     include?: string;
+    version?: number;
 }
 export interface AccountsGetScreenSetsResponse {
     screenSets: Array<ScreenSet>;
+}
+
+export interface ScreenSetVersion {
+    version: number;
+    lastModified: number;
+    comment: string;
+    uiBuilderSupport: boolean;
+}
+
+export interface AccountsGetScreenSetVersionsParams {
+    screenSetID: string;
+    startVersion?: number;
+    count?: number;
+}
+
+export interface AccountsGetScreenSetVersionsResponse {
+    screenSetVersions: ScreenSetVersion[];
 }
 
 export interface AccountsIsAvailableLoginIDParams {
@@ -878,6 +951,7 @@ export interface AccountsIsAvailableLoginIDResponse {
 
 export interface AccountsSetScreenSetParams {
     screenSetID: string;
+    comment: string;
     html: string;
     css: string;
     javascript?: string;
@@ -891,7 +965,6 @@ export interface AccountsSetScreenSetParams {
         desc?: string;
         targetEnv?: string;
         lastModified?: string;
-        version?: number;
     };
 }
 

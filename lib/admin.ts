@@ -158,6 +158,12 @@ export interface AdminServices {
         companyName: string;
     };
     secretKey: string;
+    liteAccount? : {
+        enabled: boolean;
+    };
+    subscriptions? : {
+        enabled: boolean;
+	};
 };
 export interface AdminGetPartnerParams {
     partnerID: number | string;
@@ -232,6 +238,10 @@ export interface AdminGetSiteConfigResponse {
     trustedShareURLs: Array<string>;
     logoutURL?: string;
     globalConf?: string;
+    invisibleRecaptcha?: {
+        siteKey? : string,
+        secret? : string
+    }
 }
 
 export interface AdminSetSiteConfigParams {
