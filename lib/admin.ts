@@ -1,6 +1,7 @@
 import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
 import { BaseParamsSite } from './interfaces/base-params';
+import {CaptchaProvider} from "./interfaces/captchaProvider";
 
 export * from './interfaces/gigya-response';
 export * from './interfaces/base-params';
@@ -215,6 +216,7 @@ export interface AdminGetSiteConfigResponse {
     dataCenter: string;
     trustedSiteURLs: Array<string>;
     description: string;
+    captchaProvider: CaptchaProvider;
     services: AdminServices;
     siteID: number;
     gigyaSettings: {
@@ -242,6 +244,14 @@ export interface AdminGetSiteConfigResponse {
         siteKey? : string,
         secret? : string
     }
+    recaptchaV2?: {
+        siteKey? : string,
+        secret? : string
+    }
+    funCaptcha?: {
+        siteKey? : string,
+        secret? : string
+    }
 }
 
 export interface AdminSetSiteConfigParams {
@@ -250,6 +260,7 @@ export interface AdminSetSiteConfigParams {
     dataCenter?: string;
     trustedSiteURL?: Array<string>;
     description?: string;
+    captchaProvider: CaptchaProvider;
     logoutURL?: string;
     services?: {
         gm?: {
@@ -304,6 +315,18 @@ export interface AdminSetSiteConfigParams {
     enableDataSharing?: boolean;
     trustedShareURLs?: Array<string>;
     globalConf?: string;
+    invisibleRecaptcha?: {
+        siteKey? : string,
+        secret? : string
+    }
+    recaptchaV2?: {
+        siteKey? : string,
+        secret? : string
+    }
+    funCaptcha?: {
+        siteKey? : string,
+        secret? : string
+    }
 }
 
 export interface AdminSearchParams {
