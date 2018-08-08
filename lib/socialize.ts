@@ -178,6 +178,15 @@ export class Socialize {
     }
 
     /**
+     * Connects new provider to the current user.
+     *
+     * @see http://developers.gigya.com/display/GD/socialize.addConnection+REST
+     */
+    public addConnection(params: BaseParams & any) {
+        return this.gigya.request('socialize.addConnection', params);
+    }
+
+    /**
      * Disconnects the current user from one or all of the connected providers.
      * 
      * @see http://developers.gigya.com/display/GD/socialize.removeConnection+REST
