@@ -341,7 +341,7 @@ export interface AdminSearchResponse {
 }
 
 export interface AdminDeleteSiteParams{
-    targetApiKey : string;
+    apiKey : string;
     deleteToken?  : string;
     format?  : string;
     callback?  : string;
