@@ -147,7 +147,7 @@ export class Gigya {
             }
 
             // Add API key to request if not provided.
-            if (isAdminEndpoint && !userParams.apiKey && this.apiKey) {
+            if (!isAdminEndpoint && !userParams.apiKey && this.apiKey) {
                 requestParams['apiKey'] = this.apiKey;
             }
         }
