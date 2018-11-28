@@ -95,7 +95,7 @@ export class Gigya {
 
     /**
      * Make request to Gigya. Typically, you'll want to use the defined interface (for example gigya.accounts.getAccountInfo) instead of calling request directly.
-     * 
+     *
      * If a method is not available, create an issue or pull request at: https://github.com/scotthovestadt/gigya
      */
     public async request<R>(endpoint: string, userParams: any = {}): Promise<GigyaResponse & R> {
@@ -106,9 +106,15 @@ export class Gigya {
      * Internal handler for requests.
      */
     protected async _request<R>(endpoint: string, userParams: BaseParams & { [key: string]: any; }, retries = 0): Promise<GigyaResponse & R> {
+        const isAdminEndpoint = endpoint.startsWith('admin.');
+
         // Data center can be passed as a "param" but shouldn't be sent to the server.
-        const dataCenter = userParams.dataCenter || this.dataCenter || 'us1';
-        delete userParams.dataCenter;
+        let dataCenter = this.dataCenter || 'us1';
+
+        if (!isAdminEndpoint) {
+            dataCenter = userParams.dataCenter || dataCenter;
+            delete userParams.dataCenter;
+        }
 
         // Create final set of params with defaults, credentials, and params.
         const requestParams: { [key: string]: string | null | number | boolean; } = _.assignIn(
@@ -132,7 +138,7 @@ export class Gigya {
         if (!userParams.oauth_token) {
             // Add credentials to request if no credentials provided.
             if (!userParams.secret && !userParams.userKey) {
-                if(this.secret) {
+                if (this.secret) {
                     requestParams['secret'] = this.secret;
                 }
                 if (this.userKey) {
@@ -141,11 +147,8 @@ export class Gigya {
             }
 
             // Add API key to request if not provided.
-            if (!userParams.apiKey) {
-                const namespace = endpoint.substring(0, endpoint.indexOf('.'));
-                if (this.apiKey && namespace !== 'admin') {
-                    requestParams['apiKey'] = this.apiKey;
-                }
+            if (isAdminEndpoint && !userParams.apiKey && this.apiKey) {
+                requestParams['apiKey'] = this.apiKey;
             }
         }
 
