@@ -858,6 +858,7 @@ export interface AccountsPreferencesSetSchemaField extends AccountsProfileSetSch
     minDocDate?: string;
     currentDocVersion?: number;
     minDocVersion?: number;
+    format?: string | null;
 }
 export interface AccountsGetSchemaParams {
     filter?: 'full' | 'explicitOnly' | 'clientOnly';
