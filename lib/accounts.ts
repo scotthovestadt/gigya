@@ -187,8 +187,8 @@ export class Accounts {
      *
      * @see http://developers.gigya.com/display/GD/accounts.initRegistration+REST
      */
-    public initRegistration(params?: BaseParams) {
-        return this.gigya.request<AccountsInitRegistrationResponse>('accounts.initRegistration', {});
+    public initRegistration(params: BaseParams) {
+        return this.gigya.request<AccountsInitRegistrationResponse>('accounts.initRegistration', params);
     }
 
     /**
