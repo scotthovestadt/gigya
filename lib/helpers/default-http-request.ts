@@ -5,7 +5,7 @@ import fs = require('fs');
 import path = require('path');
 
 let certificate: string;
-let verboseHttpError = process.env['GIGYA_VERBOSE_HTTP_LOGGIN'];
+let verboseHttpError = process.env['GIGYA_VERBOSE_HTTP_LOGGING'];
 
 function getCertificate(): string {
     if (!certificate) {
