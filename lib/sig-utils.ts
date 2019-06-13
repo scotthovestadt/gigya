@@ -1,4 +1,9 @@
 import crypto = require('crypto');
+// import sortKeys = require('sort-keys');
+
+import BaseParams from './interfaces/base-params';
+
+const URL = require('url').URL;
 
 /**
  * This class is a utility class with static methods for calculating and validating cryptographic signatures.
@@ -50,6 +55,101 @@ export class SigUtils {
         const unsignedExpString = loginToken + '_' + expirationTimeUnix;
         const signedExpString = this.calcSignature(unsignedExpString, secret);
         return `${expirationTimeUnix}_${signedExpString}`;
+    }
+
+    /**
+     * Use this method to obtain an OAuth signature for use in signing a request to the REST API.
+     */
+    public getOAuth1Signature(key: string, httpMethod: string, url: string, requestParams: BaseParams & { [key: string]: any; }) {
+        var baseString = this.calcOAuth1BaseString(httpMethod, url, requestParams);
+        
+        return this.calcSignature(baseString, key);
+    }
+
+    /**
+     * This method calculates the base string used to generate the signature
+     */
+    protected calcOAuth1BaseString(httpMethod: string, url: string, requestParams: any = {}) {
+        var normalizedUrl = "";
+    
+        const u = new URL(url);
+    
+        var protocol = u.protocol;
+    
+        normalizedUrl = `${protocol}//`;
+    
+        normalizedUrl += u.host.toLowerCase();
+    
+        normalizedUrl += u.pathname;
+        
+        var amp = "";
+        var queryString = "";
+        var sortedParams = this.sortByKey(requestParams);
+
+        // Create a sorted list of query parameters
+        for (const key of Object.keys(sortedParams)) {
+            var value = sortedParams[key];
+    
+            if (value !== false && value !== "0" && value === "") {
+                value = "";
+            }
+    
+            if (value === false) {
+                value = 0
+            }
+    
+            if (value === true) {
+                value = 1
+            }
+    
+            queryString += `${amp}${key}=${this.urlEncode(value)}`;
+            amp = "&";
+        };
+    
+        // Construct the base string from the HTTP method, the URL and the parameters
+        const baseString = `${httpMethod.toUpperCase()}&${this.urlEncode(normalizedUrl)}&${this.urlEncode(queryString)}`;
+    
+        return baseString;
+    }
+
+    /**
+     * This method URL encodes any "~" characters present in a given string
+     */
+    protected urlEncode(toEncode: any = {}) {
+        if (toEncode === "") {
+            return toEncode;
+        } else {
+            toEncode = encodeURIComponent(toEncode).replace("%7E", "~");
+        }
+    
+        return toEncode;
+    }
+
+    /**
+     * This method alphabetocally sorts key/value objects by their keys
+     */
+    protected sortByKey(objectToSort: any = {}) {
+        const seenInput = new Array();
+        const seenOutput = new Array();
+
+        const seenIndex = seenInput.indexOf(objectToSort);
+
+        if (seenIndex !== -1) {
+            return seenOutput[seenIndex];
+        }
+
+        const result: { [s: string]: string; } = {};
+        const keys = Object.keys(objectToSort).sort();
+
+        seenInput.push(objectToSort);
+        seenOutput.push(result);
+
+        for (const key of keys) {
+            const value = objectToSort[key];
+            result[key] = value;
+        }
+
+        return result;
     }
 }
 

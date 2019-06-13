@@ -160,6 +160,20 @@ export class Gigya {
             const namespace = endpoint.substring(0, endpoint.indexOf('.'));
             const host = `${namespace}.${dataCenter}.gigya.com`;
 
+            //add signature if a secret is not provided
+            if (!userParams.secret) {
+                if (this.secret) {
+                    var timestamp = new Date().getTime();
+                    requestParams['timestamp'] = timestamp;
+                    requestParams['nonce'] = Math.floor(Math.random() * Math.floor(timestamp));
+    
+                    //Add signature if secret provided  
+                    var protocol = "https";
+                    var resourceURI = `${protocol}://${host}/${endpoint}`;
+                    requestParams['sig'] = this.sigUtils.getOAuth1Signature(this.secret, "POST", resourceURI, requestParams);
+                }
+            }
+
             response = await this.httpRequest<R>(endpoint, host, requestParams);
 
             // Non-zero error code means failure.
@@ -199,6 +213,7 @@ export class Gigya {
         }
 
         // Return Gigya's successful response.
+
         return response;
     }
 
