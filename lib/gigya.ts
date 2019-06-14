@@ -134,48 +134,48 @@ export class Gigya {
             }
         );
 
+        // Host is constructed from the endpoint namespace and data center.
+        // Endpoint "accounts.getAccountInfo" and data center "us1" become "accounts.us1.gigya.com".
+        const namespace = endpoint.substring(0, endpoint.indexOf('.'));
+        const host = `${namespace}.${dataCenter}.gigya.com`;
+
         // Don't add credentials or API Key to request if oauth_token provided.
         if (!userParams.oauth_token) {
             // Add credentials to request if no credentials provided.
-            if (!userParams.secret && !userParams.userKey) {
-                if (this.secret) {
-                    requestParams['secret'] = this.secret;
-                }
+            if (!userParams.userKey) {
                 if (this.userKey) {
                     requestParams['userKey'] = this.userKey;
                 }
             }
 
+            //add signature if a secret is not provided
+            var sigSecret = "";
+            if (userParams.secret) {
+                sigSecret = userParams.secret;
+            } else if (this.secret) {
+                sigSecret = this.secret;
+            }
+
+            var timestamp = new Date().getTime();
+            requestParams['timestamp'] = timestamp;
+            requestParams['nonce'] = Math.floor(Math.random() * Math.floor(timestamp));
+
+            //Add signature if secret provided  
+            var protocol = "https";
+            var resourceURI = `${protocol}://${host}/${endpoint}`;
+            requestParams['sig'] = this.sigUtils.getOAuth1Signature(sigSecret, "POST", resourceURI, requestParams);
+
             // Add API key to request if not provided.
             if (!isAdminEndpoint && !userParams.apiKey && this.apiKey) {
                 requestParams['apiKey'] = this.apiKey;
             }
-        }
+        } 
 
         // Fire request.
         let response;
         try {
-            // Host is constructed from the endpoint namespace and data center.
-            // Endpoint "accounts.getAccountInfo" and data center "us1" become "accounts.us1.gigya.com".
-            const namespace = endpoint.substring(0, endpoint.indexOf('.'));
-            const host = `${namespace}.${dataCenter}.gigya.com`;
-
-            //add signature if a secret is not provided
-            if (!userParams.secret) {
-                if (this.secret) {
-                    var timestamp = new Date().getTime();
-                    requestParams['timestamp'] = timestamp;
-                    requestParams['nonce'] = Math.floor(Math.random() * Math.floor(timestamp));
-    
-                    //Add signature if secret provided  
-                    var protocol = "https";
-                    var resourceURI = `${protocol}://${host}/${endpoint}`;
-                    requestParams['sig'] = this.sigUtils.getOAuth1Signature(this.secret, "POST", resourceURI, requestParams);
-                }
-            }
-
             response = await this.httpRequest<R>(endpoint, host, requestParams);
-
+                        
             // Non-zero error code means failure.
             if (response.errorCode !== 0) {
                 throw this.createErrorFromResponse(response, endpoint, userParams);
