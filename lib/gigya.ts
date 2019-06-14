@@ -154,6 +154,11 @@ export class Gigya {
                 sigSecret = userParams.secret;
             } else if (this.secret) {
                 sigSecret = this.secret;
+            } 
+
+            // Add API key to request if not provided.
+            if (!isAdminEndpoint && !userParams.apiKey && this.apiKey) {
+                requestParams['apiKey'] = this.apiKey;
             }
 
             var timestamp = new Date().getTime();
@@ -164,18 +169,13 @@ export class Gigya {
             var protocol = "https";
             var resourceURI = `${protocol}://${host}/${endpoint}`;
             requestParams['sig'] = this.sigUtils.getOAuth1Signature(sigSecret, "POST", resourceURI, requestParams);
-
-            // Add API key to request if not provided.
-            if (!isAdminEndpoint && !userParams.apiKey && this.apiKey) {
-                requestParams['apiKey'] = this.apiKey;
-            }
         } 
 
         // Fire request.
         let response;
         try {
             response = await this.httpRequest<R>(endpoint, host, requestParams);
-                        
+
             // Non-zero error code means failure.
             if (response.errorCode !== 0) {
                 throw this.createErrorFromResponse(response, endpoint, userParams);
