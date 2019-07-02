@@ -1,7 +1,7 @@
 import Gigya from './gigya';
 import GigyaResponse from './interfaces/gigya-response';
 import { BaseParamsSite } from './interfaces/base-params';
-import {CaptchaProvider} from "./interfaces/captchaProvider";
+import { CaptchaProvider } from "./interfaces/captchaProvider";
 
 export * from './interfaces/gigya-response';
 export * from './interfaces/base-params';
@@ -87,7 +87,7 @@ export class Admin {
      *
      * @see https://developers.gigya.com/display/GD/admin.updatePartner+REST
      */
-    public updatePartner(params : BaseParamsSite & AdminUpdatePartnerParams){
+    public updatePartner(params: BaseParamsSite & AdminUpdatePartnerParams) {
         return this.gigya.request('admin.updatePartner', params);
     }
 }
@@ -97,6 +97,8 @@ export interface AdminCreateSiteParams {
     baseDomain: string;
     description?: string;
     dataCenter?: string;
+    isGlobalSite?: boolean;
+    secondaryDataCenters?: Array<string>;
 }
 export interface AdminCreateSiteResponse {
     apiKey: string;
@@ -159,12 +161,12 @@ export interface AdminServices {
         companyName: string;
     };
     secretKey: string;
-    liteAccount? : {
+    liteAccount?: {
         enabled: boolean;
     };
-    subscriptions? : {
+    subscriptions?: {
         enabled: boolean;
-	};
+    };
 };
 export interface AdminGetPartnerParams {
     partnerID: number | string;
@@ -180,7 +182,7 @@ export interface AdminGetPartnerResponse {
         companyName: string;
     };
     secretKey: string;
-    auditRetention : number | string
+    auditRetention: number | string
 }
 
 export interface AdminUserSite {
@@ -210,6 +212,7 @@ export interface AdminGetSiteConfigParams {
     explicitSiteConfig?: boolean;
     includeGigyaSettings?: boolean;
     includeGlobalConf?: boolean;
+    includeGlobalSiteSettings?: boolean;
 }
 export interface AdminGetSiteConfigResponse {
     baseDomain: string;
@@ -240,18 +243,22 @@ export interface AdminGetSiteConfigResponse {
     trustedShareURLs: Array<string>;
     logoutURL?: string;
     globalConf?: string;
+    isGlobalSite: boolean;
     invisibleRecaptcha?: {
-        siteKey? : string,
-        secret? : string
-    }
+        siteKey?: string;
+        secret?: string;
+    };
     recaptchaV2?: {
-        siteKey? : string,
-        secret? : string
-    }
+        siteKey?: string;
+        secret?: string;
+    };
     funCaptcha?: {
-        siteKey? : string,
-        secret? : string
-    }
+        siteKey?: string;
+        secret?: string;
+    };
+    globalSiteSettings?: {
+        secondaryDatacenters: Array<string>;
+    };
 }
 
 export interface AdminSetSiteConfigParams {
@@ -295,7 +302,7 @@ export interface AdminSetSiteConfigParams {
             websiteURL?: string;
             companyName?: string;
         };
-    }
+    };
     gigyaSettings?: {
         enableRequestLoggingUntil?: string;
         dsSize?: string;
@@ -316,17 +323,17 @@ export interface AdminSetSiteConfigParams {
     trustedShareURLs?: Array<string>;
     globalConf?: string;
     invisibleRecaptcha?: {
-        siteKey? : string,
-        secret? : string
-    }
+        siteKey?: string;
+        secret?: string;
+    };
     recaptchaV2?: {
-        siteKey? : string,
-        secret? : string
-    }
+        siteKey?: string;
+        secret?: string;
+    };
     funCaptcha?: {
-        siteKey? : string,
-        secret? : string
-    }
+        siteKey?: string;
+        secret?: string;
+    };
 }
 
 export interface AdminSearchParams {
@@ -340,16 +347,16 @@ export interface AdminSearchResponse {
     }>;
 }
 
-export interface AdminDeleteSiteParams{
-    apiKey : string;
-    deleteToken?  : string;
-    format?  : string;
-    callback?  : string;
-    httpStatusCodes?  : boolean;
+export interface AdminDeleteSiteParams {
+    apiKey: string;
+    deleteToken?: string;
+    format?: string;
+    callback?: string;
+    httpStatusCodes?: boolean;
 }
 
-export interface AdminUpdatePartnerParams{
-    partnerID : string;
+export interface AdminUpdatePartnerParams {
+    partnerID: string;
     defaultDataCenter?: string;
     isEnabled?: boolean;
     isMigratedToSoa?: boolean;
@@ -357,7 +364,7 @@ export interface AdminUpdatePartnerParams{
     tenantID?: string;
     format?: string;
     services?: AdminServices;
-    auditRetention? : string|number ;
+    auditRetention?: string | number;
 }
 
 export default Admin;
