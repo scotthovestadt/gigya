@@ -3,3 +3,5 @@ dist/
 node_modules/
 npm-debug.log
 .idea/
+.vs/slnx.sqlite-journal
+.vs/slnx.sqlite
