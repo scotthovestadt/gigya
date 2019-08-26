@@ -20,6 +20,8 @@ function log(msg : any) : void {
     }    
 }
 
+export let httpMethod = 'post';
+
 /**
  * Make HTTP request to Gigya.
  */
@@ -29,7 +31,7 @@ export const httpRequest: ProxyHttpRequest = <R>(endpoint: string, host: string,
     return new Promise<GigyaResponse & R>((resolve, reject) => {
         const uri = `https://${host}/${endpoint}`;
         request.post(uri, {
-            method: 'post',
+            method: httpMethod,
             form: requestParams,
             ca: getCertificate()
         }, (error, response, body) => {

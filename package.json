@@ -28,7 +28,8 @@
     "@types/node": "^7.0.0",
     "@types/request": "^0.0.39",
     "lodash": "^4.17.4",
-    "request": "^2.79.0"
+    "request": "^2.79.0",
+    "strict-uri-encode": "^2.0.0"
   },
   "files": [
     "dist",
