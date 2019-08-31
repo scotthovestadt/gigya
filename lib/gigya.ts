@@ -31,7 +31,20 @@ export * from './interfaces/error-code';
 export * from './interfaces/proxy-http-request';
 export * from './interfaces/base-params';
 
-export type RequestParams = { [key: string]: string | null | number | boolean };
+export interface FormatJsonRequest {
+    format: 'json'
+}
+
+export interface SignedRequestParams {
+    timestamp: number;
+    nonce: number;
+    sig: string;
+}
+
+export type RequestParams =
+    FormatJsonRequest
+    & Partial<SignedRequestParams>
+    & { [key: string]: string | null | number | boolean };
 
 const strictUriEncode = require('strict-uri-encode') as (str: string) => string;
 
@@ -141,7 +154,7 @@ export class Gigya {
             }),
             {
                 format: 'json'
-            }
+            } as FormatJsonRequest
         );
 
         // Don't add credentials or API Key to request if oauth_token provided.
@@ -159,10 +172,10 @@ export class Gigya {
             const secret = userParams.secret || this.secret;
 
             if (secret) {
-                requestParams['timestamp'] = Date.now();
-                requestParams['nonce'] = Math.floor(Math.random() * Math.floor(Date.now()));
-                delete requestParams['sig'];
-                requestParams['sig'] = this.createRequestSignature(secret, `https://${host.toLowerCase()}/${endpoint}`, requestParams);
+                requestParams.timestamp = Date.now();
+                requestParams.nonce = Math.floor(Math.random() * Math.floor(Date.now()));
+                delete requestParams.sig;
+                requestParams.sig = this.createRequestSignature(secret, `https://${host.toLowerCase()}/${endpoint}`, requestParams);
             }
         }
 
