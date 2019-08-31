@@ -1,7 +1,7 @@
 import _ = require('lodash');
 import sleep from './helpers/sleep';
 import SigUtils from './sig-utils';
-import Admin from './admin';
+import Admin, {DataCenter} from './admin';
 import Socialize from './socialize';
 import Accounts from './accounts';
 import DS from './ds';
@@ -15,6 +15,10 @@ import ErrorCode from './interfaces/error-code';
 import ProxyHttpRequest from './interfaces/proxy-http-request';
 import BaseParams from './interfaces/base-params';
 import * as DefaultHttpRequest from './helpers/default-http-request';
+import {SignedRequestFactory} from "./requestsFatories/SignedRequestFactory";
+import {RequestFactory} from "./requestsFatories/RequestFactory";
+import {PartnerSecretRequestFactory} from "./requestsFatories/PartnerSecretRequestFactory";
+import {AnonymousRequestFactory} from "./requestsFatories/AnonymousRequestFactory";
 
 export * from './sig-utils';
 export * from './admin';
@@ -52,10 +56,7 @@ export class Gigya {
     protected static readonly RATE_LIMIT_SLEEP = 2000;
     protected static readonly RETRY_LIMIT = 5;
     protected static readonly RETRY_DELAY = 5000;
-    protected apiKey: string | undefined;
-    protected dataCenter: string | undefined;
-    protected userKey: string | undefined;
-    protected secret: string | undefined;
+
     protected httpRequest: ProxyHttpRequest;
     public readonly sigUtils: SigUtils;
     public readonly admin: Admin;
@@ -67,28 +68,33 @@ export class Gigya {
     public readonly reports: Reports;
     public readonly idx: IDX;
 
+    protected _requestFactory: RequestFactory;
+
     /**
      * Initialize new instance of Gigya.
      */
     constructor();
     constructor(proxyHttpRequest: ProxyHttpRequest);
-    constructor(apiKey: string, dataCenter: string, proxy: ProxyHttpRequest);
-    constructor(apiKey: string, dataCenter: string, secret: string);
-    constructor(apiKey: string, dataCenter: string, userKey: string, secret?: string);
-    constructor(apiKeyOrProxy?: string | ProxyHttpRequest, dataCenter?: string, userKeyOrSecretOrProxy?: string | ProxyHttpRequest, secret?: string) {
+    constructor(apiKey: string, dataCenter: DataCenter, proxy: ProxyHttpRequest);
+    constructor(apiKey: string, dataCenter: DataCenter, secret: string);
+    constructor(apiKey: string, dataCenter: DataCenter, userKey: string, secret?: string);
+    constructor(apiKeyOrProxy?: string | ProxyHttpRequest, dataCenter: DataCenter = 'us1', userKeyOrSecretOrProxy?: string | ProxyHttpRequest, secret?: string) {
+        let apiKey: string | undefined;
+        let userKey: string | undefined;
+
         // Work with overload signature.
         if (typeof apiKeyOrProxy === 'function') {
             this.httpRequest = apiKeyOrProxy;
         } else if (apiKeyOrProxy) {
-            this.apiKey = apiKeyOrProxy;
-            this.dataCenter = dataCenter;
+            apiKey = apiKeyOrProxy;
+            dataCenter = dataCenter;
             if (typeof userKeyOrSecretOrProxy === 'function') {
                 this.httpRequest = userKeyOrSecretOrProxy;
             } else if (!secret) {
-                this.secret = userKeyOrSecretOrProxy;
+                secret = userKeyOrSecretOrProxy;
             } else {
-                this.userKey = userKeyOrSecretOrProxy;
-                this.secret = secret;
+                userKey = userKeyOrSecretOrProxy;
+                secret = secret;
             }
         }
 
@@ -100,7 +106,7 @@ export class Gigya {
         }
 
         // Initialize sub-classes.
-        this.sigUtils = new SigUtils(this.secret);
+        this.sigUtils = new SigUtils(secret);
         this.admin = new Admin(this);
         this.socialize = new Socialize(this);
         this.accounts = new Accounts(this);
@@ -109,6 +115,26 @@ export class Gigya {
         this.fidm = new Fidm(this);
         this.reports = new Reports(this);
         this.idx = new IDX(this);
+
+        if (userKey && secret) {
+            this._requestFactory = new SignedRequestFactory(
+                apiKey,
+                dataCenter,
+                this.sigUtils, {
+                    userKey,
+                    secret
+                },
+                DefaultHttpRequest.httpMethod);
+        } else if (secret) {
+            this._requestFactory = new PartnerSecretRequestFactory(
+                apiKey,
+                dataCenter,
+                secret);
+        } else {
+            this._requestFactory = new AnonymousRequestFactory(
+                apiKey,
+                dataCenter)
+        }
     }
 
     /**
@@ -124,65 +150,16 @@ export class Gigya {
      * Internal handler for requests.
      */
     protected async _request<R>(endpoint: string, userParams: BaseParams & { [key: string]: any; }, retries = 0): Promise<GigyaResponse & R> {
-        // Host is constructed from the endpoint namespace and data center.
-        // Endpoint "accounts.getAccountInfo" and data center "us1" become "accounts.us1.gigya.com".
-        const namespace = endpoint.substring(0, endpoint.indexOf('.'));
-        const isAdminEndpoint = namespace == 'admin';
-
-        // Data center can be passed as a "param" but shouldn't be sent to the server.
-        let dataCenter = this.dataCenter || 'us1';
-
-        if (!isAdminEndpoint) {
-            dataCenter = userParams.dataCenter || dataCenter;
-            delete userParams.dataCenter;
-        }
-
-        const host = `${namespace}.${dataCenter}.${dataCenter != 'cn1' ? 'gigya.com' : 'gigya-api.cn'}`;
-
-        // Create final set of params with defaults, credentials, and params.
-        const requestParams: RequestParams = _.assignIn(
-            _.mapValues(userParams, (value: any) => {
-                if (value && (_.isObject(value) || _.isArray(value))) {
-                    // Gigya wants arrays and objects stringified into JSON, eg Account profile and data objects.
-                    return JSON.stringify(value);
-                } else if (value === null) {
-                    // Null is meaningful in some contexts. Ensure it is passed.
-                    return 'null';
-                } else {
-                    return value;
-                }
-            }),
-            {
-                format: 'json'
-            } as FormatJsonRequest
-        );
-
-        // Don't add credentials or API Key to request if oauth_token provided.
-        if (!userParams.oauth_token) {
-            // Add API key to request if not provided.
-            if (!isAdminEndpoint && !userParams.apiKey && this.apiKey) {
-                requestParams['apiKey'] = this.apiKey;
-            }
-
-            // Add credentials to request if no credentials provided.
-            if (!userParams.userKey && this.userKey) {
-                requestParams['userKey'] = userParams.userKey || this.userKey;
-            }
-
-            const secret = userParams.secret || this.secret;
-
-            if (secret) {
-                requestParams.timestamp = Date.now();
-                requestParams.nonce = Math.floor(Math.random() * Math.floor(Date.now()));
-                delete requestParams.sig;
-                requestParams.sig = this.createRequestSignature(secret, `https://${host.toLowerCase()}/${endpoint}`, requestParams);
-            }
-        }
+        const request = this._requestFactory.create(endpoint, userParams);
 
         // Fire request.
         let response;
         try {
-            response = await this.httpRequest<R>(endpoint, host, requestParams);
+            response = await this.httpRequest<R>(
+                request.endpoint,
+                request.host,
+                request.params,
+                request.headers);
 
             // Non-zero error code means failure.
             if (response.errorCode !== 0) {
