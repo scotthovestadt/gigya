@@ -33,7 +33,7 @@ export class AnonymousRequestFactory extends RequestFactory {
             host: this.getRequestHost(namespace, dataCenter),
             endpoint,
             params: this.getRequestParams(userParams),
-            headers: []
+            headers: {}
         } as GigyaRequest;
 
         if (!isOAuthRequest) {

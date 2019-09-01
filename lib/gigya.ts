@@ -19,6 +19,7 @@ import {SignedRequestFactory} from "./requestsFatories/SignedRequestFactory";
 import {RequestFactory} from "./requestsFatories/RequestFactory";
 import {PartnerSecretRequestFactory} from "./requestsFatories/PartnerSecretRequestFactory";
 import {AnonymousRequestFactory} from "./requestsFatories/AnonymousRequestFactory";
+import {AuthBearerRequestFactory, RSACredentials} from "./requestsFatories/AuthBearerRequestFactory";
 
 export * from './sig-utils';
 export * from './admin';
@@ -78,9 +79,14 @@ export class Gigya {
     constructor(apiKey: string, dataCenter: DataCenter, proxy: ProxyHttpRequest);
     constructor(apiKey: string, dataCenter: DataCenter, secret: string);
     constructor(apiKey: string, dataCenter: DataCenter, userKey: string, secret?: string);
-    constructor(apiKeyOrProxy?: string | ProxyHttpRequest, dataCenter: DataCenter = 'us1', userKeyOrSecretOrProxy?: string | ProxyHttpRequest, secret?: string) {
+    constructor(apiKey: string, dataCenter: DataCenter, credentials: RSACredentials);
+    constructor(apiKeyOrProxy?: string | ProxyHttpRequest,
+                dataCenter: DataCenter = 'us1',
+                userKeyOrSecretOrCredentialsOrProxy?: string | RSACredentials | ProxyHttpRequest,
+                secret?: string) {
         let apiKey: string | undefined;
         let userKey: string | undefined;
+        let creds: RSACredentials | undefined;
 
         // Work with overload signature.
         if (typeof apiKeyOrProxy === 'function') {
@@ -88,12 +94,14 @@ export class Gigya {
         } else if (apiKeyOrProxy) {
             apiKey = apiKeyOrProxy;
             dataCenter = dataCenter;
-            if (typeof userKeyOrSecretOrProxy === 'function') {
-                this.httpRequest = userKeyOrSecretOrProxy;
+            if (typeof userKeyOrSecretOrCredentialsOrProxy === 'function') {
+                this.httpRequest = userKeyOrSecretOrCredentialsOrProxy;
+            } else if (typeof userKeyOrSecretOrCredentialsOrProxy === 'object') {
+                creds = userKeyOrSecretOrCredentialsOrProxy;
             } else if (!secret) {
-                secret = userKeyOrSecretOrProxy;
+                secret = userKeyOrSecretOrCredentialsOrProxy;
             } else {
-                userKey = userKeyOrSecretOrProxy;
+                userKey = userKeyOrSecretOrCredentialsOrProxy;
                 secret = secret;
             }
         }
@@ -116,7 +124,13 @@ export class Gigya {
         this.reports = new Reports(this);
         this.idx = new IDX(this);
 
-        if (userKey && secret) {
+        if (creds) {
+            this._requestFactory = new AuthBearerRequestFactory(
+                apiKey,
+                dataCenter,
+                creds
+            );
+        } else if (userKey && secret) {
             this._requestFactory = new SignedRequestFactory(
                 apiKey,
                 dataCenter,

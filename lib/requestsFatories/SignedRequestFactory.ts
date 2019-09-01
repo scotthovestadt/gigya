@@ -1,4 +1,4 @@
-import {Credentials, SimpleRequestFactory} from "./SimpleRequestFactory";
+import {SecretCredentials, SimpleRequestFactory} from "./SimpleRequestFactory";
 import {DataCenter} from "../gigya";
 import SigUtils from '../sig-utils';
 import {GigyaRequest, RequestParams} from "./RequestFactory";
@@ -15,12 +15,12 @@ export class SignedRequestFactory extends SimpleRequestFactory {
     constructor(apiKey: string|undefined,
                 dataCenter: DataCenter,
                 protected _sigUtils: SigUtils,
-                creds: Credentials,
+                creds: SecretCredentials,
                 protected _httpMethod: "post" | "get" = 'post') {
         super(apiKey, dataCenter, creds);
     }
 
-    protected sign(request: GigyaRequest<Credentials & SignedRequestParams>) {
+    protected sign(request: GigyaRequest<SecretCredentials & SignedRequestParams>) {
         super.sign(request);
         const requestParams = request.params;
         const effectiveSecret = requestParams.secret;
@@ -31,7 +31,7 @@ export class SignedRequestFactory extends SimpleRequestFactory {
 
         if (effectiveSecret) {
             requestParams.timestamp = Date.now();
-            requestParams.nonce = Math.floor(Math.random() * Math.floor(Date.now()));
+            requestParams.nonce = this.createNonce();
             requestParams.sig =
                 this.createRequestSignature(
                     this._creds.secret,
