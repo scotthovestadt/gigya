@@ -54,7 +54,9 @@ export type RequestParams =
 
 const strictUriEncode = require('strict-uri-encode') as (str: string) => string;
 
-export type CredentialsType = false | string | SecretCredentials | RSACredentials;
+export type NoCredentials = false|undefined;
+export type PartnerSecret = string;
+export type CredentialsType = NoCredentials | PartnerSecret | SecretCredentials | RSACredentials;
 
 export class Gigya {
     protected static readonly RATE_LIMIT_SLEEP = 2000;
@@ -81,7 +83,7 @@ export class Gigya {
      */
     constructor();
     constructor(proxyHttpRequest: ProxyHttpRequest);
-    constructor(apiKey: string, dataCenter: DataCenter, proxy: ProxyHttpRequest);
+    constructor(apiKey: string, dataCenter: DataCenter, proxy?: ProxyHttpRequest);
     constructor(apiKey: string, dataCenter: DataCenter, secret: string);
     constructor(apiKey: string, dataCenter: DataCenter, userKey: string, secret?: string);
     constructor(apiKey: string, dataCenter: DataCenter, credentials: RSACredentials);
@@ -90,24 +92,34 @@ export class Gigya {
                 userKeyOrSecretOrCredentialsOrProxy?: string | RSACredentials | ProxyHttpRequest,
                 secret?: string) {
 
-        let creds: CredentialsType = false;
+        let creds: CredentialsType;
 
         // Work with overload signature.
         if (typeof apiKeyOrProxy === 'function') {
             this.httpRequest = apiKeyOrProxy;
         } else if (apiKeyOrProxy) {
             this._apiKey = apiKeyOrProxy;
-            if (typeof userKeyOrSecretOrCredentialsOrProxy === 'function') {
-                this.httpRequest = userKeyOrSecretOrCredentialsOrProxy;
-            } else if (typeof userKeyOrSecretOrCredentialsOrProxy === 'object') {
-                creds = userKeyOrSecretOrCredentialsOrProxy as RSACredentials;
-            } else if (!secret) {
-                creds = userKeyOrSecretOrCredentialsOrProxy as string;
-            } else {
-                creds = {
-                    userKey: userKeyOrSecretOrCredentialsOrProxy,
-                    secret
-                } as SecretCredentials;
+
+            switch (typeof userKeyOrSecretOrCredentialsOrProxy) {
+                case 'object':
+                    creds = userKeyOrSecretOrCredentialsOrProxy as RSACredentials;
+                    break;
+                case 'string':
+                    if (!secret) {
+                        creds = userKeyOrSecretOrCredentialsOrProxy as PartnerSecret;
+                    } else {
+                        creds = {
+                            userKey: userKeyOrSecretOrCredentialsOrProxy,
+                            secret
+                        } as SecretCredentials;
+                    }
+                    break;
+                case 'function': // proxy
+                    this.httpRequest = userKeyOrSecretOrCredentialsOrProxy;
+                    // fallthrough
+                default:
+                    creds = false as NoCredentials;
+
             }
         }
 
@@ -145,7 +157,7 @@ export class Gigya {
             this._requestFactory = new PartnerSecretRequestFactory(
                 this._apiKey,
                 this._dataCenter,
-                credentials);
+                credentials as PartnerSecret);
         } else if (credentials.userKey) {
             if (isRSACreds(credentials)) {
                 this._requestFactory = new AuthBearerRequestFactory(
