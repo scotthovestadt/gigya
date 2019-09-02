@@ -20,6 +20,7 @@ import {RequestFactory} from "./requestsFatories/RequestFactory";
 import {PartnerSecretRequestFactory} from "./requestsFatories/PartnerSecretRequestFactory";
 import {AnonymousRequestFactory} from "./requestsFatories/AnonymousRequestFactory";
 import {AuthBearerRequestFactory, RSACredentials} from "./requestsFatories/AuthBearerRequestFactory";
+import {SecretCredentials} from "./requestsFatories/SimpleRequestFactory";
 
 export * from './sig-utils';
 export * from './admin';
@@ -53,10 +54,14 @@ export type RequestParams =
 
 const strictUriEncode = require('strict-uri-encode') as (str: string) => string;
 
+export type CredentialsType = false | string | SecretCredentials | RSACredentials;
+
 export class Gigya {
     protected static readonly RATE_LIMIT_SLEEP = 2000;
     protected static readonly RETRY_LIMIT = 5;
     protected static readonly RETRY_DELAY = 5000;
+
+    protected _apiKey: string | undefined;
 
     protected httpRequest: ProxyHttpRequest;
     public readonly sigUtils: SigUtils;
@@ -81,28 +86,28 @@ export class Gigya {
     constructor(apiKey: string, dataCenter: DataCenter, userKey: string, secret?: string);
     constructor(apiKey: string, dataCenter: DataCenter, credentials: RSACredentials);
     constructor(apiKeyOrProxy?: string | ProxyHttpRequest,
-                dataCenter: DataCenter = 'us1',
+                protected _dataCenter: DataCenter = 'us1',
                 userKeyOrSecretOrCredentialsOrProxy?: string | RSACredentials | ProxyHttpRequest,
                 secret?: string) {
-        let apiKey: string | undefined;
-        let userKey: string | undefined;
-        let creds: RSACredentials | undefined;
+
+        let creds: CredentialsType = false;
 
         // Work with overload signature.
         if (typeof apiKeyOrProxy === 'function') {
             this.httpRequest = apiKeyOrProxy;
         } else if (apiKeyOrProxy) {
-            apiKey = apiKeyOrProxy;
-            dataCenter = dataCenter;
+            this._apiKey = apiKeyOrProxy;
             if (typeof userKeyOrSecretOrCredentialsOrProxy === 'function') {
                 this.httpRequest = userKeyOrSecretOrCredentialsOrProxy;
             } else if (typeof userKeyOrSecretOrCredentialsOrProxy === 'object') {
-                creds = userKeyOrSecretOrCredentialsOrProxy;
+                creds = userKeyOrSecretOrCredentialsOrProxy as RSACredentials;
             } else if (!secret) {
-                secret = userKeyOrSecretOrCredentialsOrProxy;
+                creds = userKeyOrSecretOrCredentialsOrProxy as string;
             } else {
-                userKey = userKeyOrSecretOrCredentialsOrProxy;
-                secret = secret;
+                creds = {
+                    userKey: userKeyOrSecretOrCredentialsOrProxy,
+                    secret
+                } as SecretCredentials;
             }
         }
 
@@ -124,31 +129,45 @@ export class Gigya {
         this.reports = new Reports(this);
         this.idx = new IDX(this);
 
-        if (creds) {
-            this._requestFactory = new AuthBearerRequestFactory(
-                apiKey,
-                dataCenter,
-                creds
-            );
-        } else if (userKey && secret) {
-            this._requestFactory = new SignedRequestFactory(
-                apiKey,
-                dataCenter,
-                this.sigUtils, {
-                    userKey,
-                    secret
-                },
-                DefaultHttpRequest.httpMethod);
-        } else if (secret) {
-            this._requestFactory = new PartnerSecretRequestFactory(
-                apiKey,
-                dataCenter,
-                secret);
-        } else {
-            this._requestFactory = new AnonymousRequestFactory(
-                apiKey,
-                dataCenter)
+        this.setCredentials(creds);
+    }
+
+    public setCredentials(credentials: CredentialsType): this {
+        function isRSACreds(credentials: RSACredentials | any): credentials is RSACredentials {
+            return !!credentials.privateKey;
         }
+
+        if (!credentials) {
+            this._requestFactory = new AnonymousRequestFactory(
+                this._apiKey,
+                this._dataCenter);
+        } else if (typeof credentials == 'string') {
+            this._requestFactory = new PartnerSecretRequestFactory(
+                this._apiKey,
+                this._dataCenter,
+                credentials);
+        } else if (credentials.userKey) {
+            if (isRSACreds(credentials)) {
+                this._requestFactory = new AuthBearerRequestFactory(
+                    this._apiKey,
+                    this._dataCenter,
+                    credentials
+                );
+            } else if (credentials.secret) {
+                this._requestFactory = new SignedRequestFactory(
+                    this._apiKey,
+                    this._dataCenter,
+                    this.sigUtils,
+                    credentials,
+                    DefaultHttpRequest.httpMethod);
+            } else {
+                throw 'missing secret/privateKey';
+            }
+
+        } else {
+            throw 'unsupported credentials';
+        }
+        return this;
     }
 
     /**
