@@ -1,19 +1,13 @@
 {
-  "name": "gigya",
+  "name": "gigya-headers",
   "description": "Gigya SDK for NodeJS.",
   "keywords": [
     "gigya"
   ],
   "version": "2.0.43",
-  "author": {
-    "name": "Scott Hovestadt",
-    "email": "scott.hovestadt@gmail.com"
-  },
+  "author": "Scott Hovestadt <scott.hovestadt@gmail.com>",
   "maintainers": [
-    {
-      "name": "Scott Hovestadt",
-      "email": "scott.hovestadt@gmail.com"
-    }
+    "Scott Hovestadt <scott.hovestadt@gmail.com>"
   ],
   "scripts": {
     "prepublish": "npm run build",
@@ -36,7 +30,6 @@
   ],
   "main": "dist/index.js",
   "typings": "dist/index",
-  "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/scotthovestadt/gigya/issues"
   },
@@ -44,5 +37,8 @@
   "devDependencies": {
     "typescript": "2.1.5"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "directories": {
+    "lib": "lib"
+  }
 }

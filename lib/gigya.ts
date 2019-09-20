@@ -14,6 +14,7 @@ import GigyaResponse from './interfaces/gigya-response';
 import ErrorCode from './interfaces/error-code';
 import ProxyHttpRequest from './interfaces/proxy-http-request';
 import BaseParams from './interfaces/base-params';
+import { Headers } from 'request';
 
 export * from './sig-utils';
 export * from './admin';
@@ -99,13 +100,22 @@ export class Gigya {
      * If a method is not available, create an issue or pull request at: https://github.com/scotthovestadt/gigya
      */
     public async request<R>(endpoint: string, userParams: any = {}): Promise<GigyaResponse & R> {
-        return this._request<R>(endpoint, userParams);
+        return this._request<R>(endpoint, userParams, {});
+    }
+
+    /**
+     * Make request to Gigya. Typically, you'll want to use the defined interface (for example gigya.accounts.getAccountInfo) instead of calling request directly.
+     *
+     * If a method is not available, create an issue or pull request at: https://github.com/scotthovestadt/gigya
+     */
+    public async requestWithHeaders<R>(endpoint: string, userParams: any = {}, headers: Headers): Promise<GigyaResponse & R> {
+        return this._request<R>(endpoint, userParams, headers);
     }
 
     /**
      * Internal handler for requests.
      */
-    protected async _request<R>(endpoint: string, userParams: BaseParams & { [key: string]: any; }, retries = 0): Promise<GigyaResponse & R> {
+    protected async _request<R>(endpoint: string, userParams: BaseParams & { [key: string]: any; }, headers: Headers, retries = 0): Promise<GigyaResponse & R> {
         const isAdminEndpoint = endpoint.startsWith('admin.');
 
         // Data center can be passed as a "param" but shouldn't be sent to the server.
@@ -160,7 +170,7 @@ export class Gigya {
             const namespace = endpoint.substring(0, endpoint.indexOf('.'));
             const host = `${namespace}.${dataCenter}.gigya.com`;
 
-            response = await this.httpRequest<R>(endpoint, host, requestParams);
+            response = await this.httpRequest<R>(endpoint, host, requestParams, headers);
 
             // Non-zero error code means failure.
             if (response.errorCode !== 0) {
@@ -176,7 +186,7 @@ export class Gigya {
                     if (Gigya.RETRY_DELAY) {
                         await sleep(Gigya.RETRY_DELAY);
                     }
-                    return this._request<R>(endpoint, userParams, retries);
+                    return this._request<R>(endpoint, userParams, headers, retries);
                 }
             }
             throw e;
@@ -186,7 +196,7 @@ export class Gigya {
         if (response.errorCode === ErrorCode.RATE_LIMIT_HIT) {
             // Try again after waiting.
             await sleep(Gigya.RATE_LIMIT_SLEEP);
-            return this._request<R>(endpoint, userParams, retries);
+            return this._request<R>(endpoint, userParams, headers, retries);
         }
 
         // Ensure Gigya returned successful response. If not, throw error with details.

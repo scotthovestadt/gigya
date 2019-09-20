@@ -1,4 +1,6 @@
 import GigyaResponse from '../interfaces/gigya-response';
-export type ProxyHttpRequest = <R>(endpoint: string, dataCenter: string, requestParams: { [key: string]: string | null | number | boolean; }) => Promise<GigyaResponse & R>;
+import {Headers} from 'request';
+
+export type ProxyHttpRequest = <R>(endpoint: string, dataCenter: string, requestParams: { [key: string]: string | null | number | boolean; }, headers?: Headers ) => Promise<GigyaResponse & R>;
 
 export default ProxyHttpRequest;
