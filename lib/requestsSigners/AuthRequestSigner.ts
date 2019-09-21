@@ -13,7 +13,7 @@ export abstract class AuthRequestSigner<T extends UserKeyCredentials> implements
     protected constructor(protected _creds: T) {
     }
 
-    public abstract sign(request: GigyaRequest<UserKeyCredentials>) : void;
+    public abstract sign(request: GigyaRequest<T>) : void;
 
     protected createNonce() {
         return Math.floor(Math.random() * Math.floor(Date.now()));
