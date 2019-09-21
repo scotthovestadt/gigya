@@ -1,7 +1,7 @@
-import {SecretCredentials, SimpleRequestFactory} from "./SimpleRequestFactory";
+import {SecretCredentials, SimpleRequestSigner} from "./SimpleRequestSigner";
 import {DataCenter} from "../gigya";
 import SigUtils from '../sig-utils';
-import {GigyaRequest, RequestParams} from "./RequestFactory";
+import {GigyaRequest, RequestParams} from "../RequestFactory";
 
 const strictUriEncode = require('strict-uri-encode') as (str: string) => string;
 
@@ -11,16 +11,14 @@ interface SignedRequestParams {
     sig: string;
 }
 
-export class SignedRequestFactory extends SimpleRequestFactory {
-    constructor(apiKey: string|undefined,
-                dataCenter: DataCenter,
-                protected _sigUtils: SigUtils,
+export class CredentialsSigner extends SimpleRequestSigner {
+    constructor(protected _sigUtils: SigUtils,
                 creds: SecretCredentials,
                 protected _httpMethod: "post" | "get" = 'post') {
-        super(apiKey, dataCenter, creds);
+        super(creds);
     }
 
-    protected sign(request: GigyaRequest<SecretCredentials & SignedRequestParams>) {
+    public sign(request: GigyaRequest<SecretCredentials & SignedRequestParams>) {
         super.sign(request);
         const requestParams = request.params;
         const effectiveSecret = requestParams.secret;

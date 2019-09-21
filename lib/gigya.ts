@@ -15,12 +15,14 @@ import ErrorCode from './interfaces/error-code';
 import ProxyHttpRequest from './interfaces/proxy-http-request';
 import BaseParams from './interfaces/base-params';
 import * as DefaultHttpRequest from './helpers/default-http-request';
-import {SignedRequestFactory} from "./requestsFatories/SignedRequestFactory";
-import {RequestFactory} from "./requestsFatories/RequestFactory";
-import {PartnerSecretRequestFactory} from "./requestsFatories/PartnerSecretRequestFactory";
-import {AnonymousRequestFactory} from "./requestsFatories/AnonymousRequestFactory";
-import {AuthBearerRequestFactory, RSACredentials} from "./requestsFatories/AuthBearerRequestFactory";
-import {SecretCredentials} from "./requestsFatories/SimpleRequestFactory";
+import {CredentialsSigner} from "./requestsSigners/CredentialsSigner";
+import {RequestFactory} from "./RequestFactory";
+import {hasPartnerSecret, PartnerSecret, PartnerSecretSigner} from "./requestsSigners/PartnerSecretSigner";
+import {AnonymousRequestSigner, isAnonymous, NoCredentials} from "./requestsSigners/AnonymousRequestSigner";
+import {AuthBearerSigner, isRSACreds, RSACredentials} from "./requestsSigners/AuthBearerSigner";
+import {isSecretCredentials, SecretCredentials} from "./requestsSigners/SimpleRequestSigner";
+import {ISigner} from "./requestsSigners/ISigner";
+import {isCredentials} from "./requestsSigners/AuthRequestSigner";
 
 export * from './sig-utils';
 export * from './admin';
@@ -54,9 +56,7 @@ export type RequestParams =
 
 const strictUriEncode = require('strict-uri-encode') as (str: string) => string;
 
-export type NoCredentials = false|undefined;
-export type PartnerSecret = string;
-export type CredentialsType = NoCredentials | PartnerSecret | SecretCredentials | RSACredentials;
+export type CredentialsType = NoCredentials | { secret: PartnerSecret } | SecretCredentials | RSACredentials;
 
 export class Gigya {
     protected static readonly RATE_LIMIT_SLEEP = 2000;
@@ -76,7 +76,7 @@ export class Gigya {
     public readonly reports: Reports;
     public readonly idx: IDX;
 
-    protected _requestFactory: RequestFactory;
+    protected _signer: ISigner;
 
     /**
      * Initialize new instance of Gigya.
@@ -92,7 +92,7 @@ export class Gigya {
                 userKeyOrSecretOrCredentialsOrProxy?: string | RSACredentials | ProxyHttpRequest,
                 secret?: string) {
 
-        let creds: CredentialsType;
+        let creds: CredentialsType = false;
 
         // Work with overload signature.
         if (typeof apiKeyOrProxy === 'function') {
@@ -106,7 +106,7 @@ export class Gigya {
                     break;
                 case 'string':
                     if (!secret) {
-                        creds = userKeyOrSecretOrCredentialsOrProxy as PartnerSecret;
+                        creds = {secret: userKeyOrSecretOrCredentialsOrProxy as PartnerSecret};
                     } else {
                         creds = {
                             userKey: userKeyOrSecretOrCredentialsOrProxy,
@@ -116,7 +116,7 @@ export class Gigya {
                     break;
                 case 'function': // proxy
                     this.httpRequest = userKeyOrSecretOrCredentialsOrProxy;
-                    // fallthrough
+                // fallthrough
                 default:
                     creds = false as NoCredentials;
 
@@ -145,41 +145,31 @@ export class Gigya {
     }
 
     public setCredentials(credentials: CredentialsType): this {
-        function isRSACreds(credentials: RSACredentials | any): credentials is RSACredentials {
-            return !!credentials.privateKey;
-        }
+        const signer = this.getSigner(credentials);
+        if (!signer) throw 'unsupported credentials';
+        this._signer = signer;
+        return this;
+    }
 
-        if (!credentials) {
-            this._requestFactory = new AnonymousRequestFactory(
-                this._apiKey,
-                this._dataCenter);
-        } else if (typeof credentials == 'string') {
-            this._requestFactory = new PartnerSecretRequestFactory(
-                this._apiKey,
-                this._dataCenter,
-                credentials as PartnerSecret);
-        } else if (credentials.userKey) {
+    protected getSigner(credentials: CredentialsType): ISigner|null {
+        if (isAnonymous(credentials)) {
+            return new AnonymousRequestSigner();
+        } else if (hasPartnerSecret(credentials)) {
+            return new PartnerSecretSigner(credentials.secret as PartnerSecret);
+        } else if (isCredentials(credentials)) {
             if (isRSACreds(credentials)) {
-                this._requestFactory = new AuthBearerRequestFactory(
-                    this._apiKey,
-                    this._dataCenter,
-                    credentials
-                );
-            } else if (credentials.secret) {
-                this._requestFactory = new SignedRequestFactory(
-                    this._apiKey,
-                    this._dataCenter,
+                return new AuthBearerSigner(credentials);
+            } else if (isSecretCredentials(credentials)) {
+                return new CredentialsSigner(
                     this.sigUtils,
                     credentials,
                     DefaultHttpRequest.httpMethod);
             } else {
                 throw 'missing secret/privateKey';
             }
-
-        } else {
-            throw 'unsupported credentials';
         }
-        return this;
+
+        return null;
     }
 
     /**
@@ -195,7 +185,16 @@ export class Gigya {
      * Internal handler for requests.
      */
     protected async _request<R>(endpoint: string, userParams: BaseParams & { [key: string]: any; }, retries = 0): Promise<GigyaResponse & R> {
-        const request = this._requestFactory.create(endpoint, userParams);
+        const requestFactory = new RequestFactory(
+            userParams.apiKey || this._apiKey,
+            userParams.dataCenter || this._dataCenter);
+
+        const request = requestFactory.create(endpoint, userParams);
+
+        if (!request.skipSigning) {
+            const signer = this.getSigner(userParams as CredentialsType) || this._signer;
+            signer.sign(request);
+        }
 
         // Fire request.
         let response;
