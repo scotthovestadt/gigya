@@ -39,6 +39,9 @@ const gigya = new Gigya('YOUR_API_KEY', 'YOUR_DATA_CENTER', 'YOUR_SECRET');
 // Initialize SDK with your API Key, User Key, and User Secret.
 const gigya = new Gigya('YOUR_API_KEY', 'YOUR_DATA_CENTER', 'YOUR_USER_KEY', 'YOUR_USER_SECRET');
 
+// Initialize SDK with your API Key, User Key, and Private Key.
+const gigya = new Gigya('YOUR_API_KEY', 'YOUR_DATA_CENTER', { userKey: 'YOUR_USER_KEY', privateKey: 'YOUR_USER_PRIVATE_KEY' });
+
 // or:
 
 // Initialize without keys and pass to each method.
