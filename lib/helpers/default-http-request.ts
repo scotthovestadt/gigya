@@ -3,6 +3,7 @@ import ProxyHttpRequest from '../interfaces/proxy-http-request';
 import GigyaResponse from '../interfaces/gigya-response';
 import fs = require('fs');
 import path = require('path');
+import {Headers} from "request";
 
 let certificate: string;
 let verboseHttpError = process.env['GIGYA_VERBOSE_HTTP_LOGGING'];
@@ -20,18 +21,21 @@ function log(msg : any) : void {
     }    
 }
 
+export const httpMethod = 'post';
+
 /**
  * Make HTTP request to Gigya.
  */
-export const httpRequest: ProxyHttpRequest = <R>(endpoint: string, host: string, requestParams: any) => {
+export const httpRequest: ProxyHttpRequest = <R>(endpoint: string, host: string, requestParams: any, headers?: Headers) => {
     let start = Date.now();
 
     return new Promise<GigyaResponse & R>((resolve, reject) => {
         const uri = `https://${host}/${endpoint}`;
         request.post(uri, {
-            method: 'post',
+            method: httpMethod,
             form: requestParams,
-            ca: getCertificate()
+            ca: getCertificate(),
+            headers
         }, (error, response, body) => {
             log(`request to ${uri} took ${(new Date().getTime() - start) / 1000} seconds`);
             if (error) {

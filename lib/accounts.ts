@@ -99,7 +99,7 @@ export class Accounts {
      * @see http://developers.gigya.com/display/GD/accounts.getJWTPublicKey+REST
      */
     public getJWTPublicKey(params?: BaseParams) {
-        return this.gigya.request<AccountsGetJWTPublicKeyResponse>('accounts.getJWTPublicKey', {});
+        return this.gigya.request<AccountsGetJWTPublicKeyResponse>('accounts.getJWTPublicKey', params);
     }
 
     /**
