@@ -4,7 +4,7 @@
   "keywords": [
     "gigya"
   ],
-  "version": "2.0.43",
+  "version": "3.0.0",
   "author": {
     "name": "Scott Hovestadt",
     "email": "scott.hovestadt@gmail.com"
@@ -13,10 +13,14 @@
     {
       "name": "Scott Hovestadt",
       "email": "scott.hovestadt@gmail.com"
+    },
+    {
+      "name": "Baryo Bar Yosef",
+      "email": "baryo.stuff@gmail.com"
     }
   ],
   "scripts": {
-    "prepublish": "npm run build",
+    "prepack": "npm run build",
     "build": "tsc"
   },
   "repository": {
