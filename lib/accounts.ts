@@ -512,6 +512,16 @@ export interface AccountsGetPoliciesResponse {
         confirmationLinkExpiration: number;
         confirmationEmailTemplates: { [key: string]: string; };
     };
+    authentication:{
+        methods:{
+            Password:{
+                enabled:boolean
+            },
+            Push:{
+                enabled:boolean
+            }
+        }
+    }
 }
 
 export type AccountsSetPoliciesParams = {
@@ -605,6 +615,16 @@ export type AccountsSetPoliciesParams = {
             [key: string]: string;
         };
     } | null;
+    authentication?:{
+        methods:{
+            Password:{
+                enabled:boolean
+            },
+            Push?:{
+                enabled:boolean
+            }
+        }
+    }
 }
 
 export interface AccountsGetRegisteredCountersResponse {
