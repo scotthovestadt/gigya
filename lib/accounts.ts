@@ -360,6 +360,7 @@ export interface AccountsExchangeUIDSignatureParams {
     signatureTimestamp: string;
     userKey: string;
 }
+
 export interface AccountsExchangeUIDSignatureResponse {
     UID: string;
     UIDSignature: string;
@@ -383,6 +384,7 @@ export interface AccountsGetAccountInfoParams {
 export interface AccountsGetConflictingAccountParams {
     regToken: string;
 }
+
 export interface AccountsGetConflictingAccountResponse {
     conflictingAccount: {
         loginProviders: Array<string>;
@@ -395,6 +397,7 @@ export interface AccountsGetCountersParams {
     regToken?: string;
     counters: Array<Counter>;
 }
+
 export interface AccountsGetCountersResponse {
     counters: Array<Counter>;
 }
@@ -413,6 +416,7 @@ export interface AccountsGetJWTParams {
     fields?: string;
     expiration?: number;
 }
+
 export interface AccountsGetJWTResponse {
     id_token: string;
     ignoredFields: string;
@@ -512,19 +516,12 @@ export interface AccountsGetPoliciesResponse {
         confirmationLinkExpiration: number;
         confirmationEmailTemplates: { [key: string]: string; };
     };
-    authentication:{
-        methods:{
-            Password:{
-                enabled:boolean
-            },
-            Push:{
-                enabled:boolean
-            }
-        }
+    authentication: {
+        methods: AuthMethods;
     }
 }
 
-export type AccountsSetPoliciesParams = {
+export interface AccountsSetPoliciesParams {
     accountOptions?: {
         verifyEmail?: boolean;
         verifyProviderEmail?: boolean;
@@ -615,18 +612,10 @@ export type AccountsSetPoliciesParams = {
             [key: string]: string;
         };
     } | null;
-    authentication?:{
-        methods:{
-            Password:{
-                enabled:boolean
-            },
-            Push?:{
-                enabled:boolean
-            }
-        }
+    authentication?: {
+        methods?: AuthMethods
     }
 }
-
 export interface AccountsGetRegisteredCountersResponse {
     counters: Array<Counter>;
 }
@@ -763,6 +752,7 @@ export interface AccountsResetPasswordParams {
     lang?: string;
     sendEmail?: string;
 }
+
 export interface AccountsResetPasswordResponse {
     secretQuestion?: string;
     passwordResetToken?: string;
@@ -782,6 +772,7 @@ export interface AccountsSearchParams {
     timeout?: number;
     restrictedQuery?: string;
 }
+
 export interface AccountsSearchResponse {
     results: Array<Account>;
     nextCursorId?: string;
@@ -822,9 +813,11 @@ export interface AccountsNotifyLoginParams {
     regSource?: string;
     sessionExpiration?: SessionExpiration;
 }
+
 export interface AccountsNotifyLoginParamsSiteUID extends AccountsNotifyLoginParams {
     siteUID: string;
 }
+
 export interface AccountsNotifyLoginParamsProviderSessions extends AccountsNotifyLoginParams {
     providerSessions: { [key: string]: any; };
 }
@@ -832,6 +825,7 @@ export interface AccountsNotifyLoginParamsProviderSessions extends AccountsNotif
 export type AccountsSchemaWriteAccess = 'serverOnly' | 'clientCreate' | 'clientModify';
 export type AccountsSchemaType = 'integer' | 'long' | 'float' | 'basic-string' | 'string' | 'text' | 'date' | 'boolean';
 export type AccountsSchemaEncrypt = 'AES' | '';
+
 export interface AccountsSetSchemaParams {
     profileSchema?: {
         fields: {
@@ -856,22 +850,26 @@ export interface AccountsSetSchemaParams {
     };
     scope?: 'group' | 'site';
 }
+
 export interface AccountsProfileSetSchemaField {
     required?: boolean;
     writeAccess?: AccountsSchemaWriteAccess;
     languages?: Array<string>;
 }
+
 export interface AccountsDataSetSchemaField extends AccountsProfileSetSchemaField {
     allowNull?: boolean;
     encrypt?: AccountsSchemaEncrypt | null;
     format?: string | null;
     type?: AccountsSchemaType;
 }
+
 export interface AccountsSubscriptionSetSchemaField extends AccountsProfileSetSchemaField {
-    doubleOptIn? : boolean;
-    description? : string | null;
+    doubleOptIn?: boolean;
+    description?: string | null;
     type?: AccountsSchemaType;
 }
+
 export interface AccountsPreferencesSetSchemaField extends AccountsProfileSetSchemaField {
     type?: 'consent';
     currentDocDate?: string;
@@ -880,11 +878,13 @@ export interface AccountsPreferencesSetSchemaField extends AccountsProfileSetSch
     minDocVersion?: number;
     format?: string | null;
 }
+
 export interface AccountsGetSchemaParams {
     filter?: 'full' | 'explicitOnly' | 'clientOnly';
     scope?: 'effective' | 'group' | 'site';
     internalSchema?: boolean;
 }
+
 export interface AccountsGetSchemaResponse {
     profileSchema: {
         fields: {
@@ -907,6 +907,7 @@ export interface AccountsGetSchemaResponse {
         };
     };
 }
+
 export interface AccountsGetSchemaField {
     type: AccountsSchemaType;
     required: boolean;
@@ -916,6 +917,7 @@ export interface AccountsGetSchemaField {
     encrypt?: AccountsSchemaEncrypt;
     format?: string;
 }
+
 export interface AccountsPreferencesGetSchemaField {
     type: 'consent';
     required: boolean;
@@ -945,11 +947,13 @@ export interface ScreenSet {
         version?: number;
     };
 }
+
 export interface AccountsGetScreenSetsParams {
     screenSetIDs?: string | Array<string>;
     include?: string;
     version?: number;
 }
+
 export interface AccountsGetScreenSetsResponse {
     screenSets: Array<ScreenSet>;
 }
@@ -974,6 +978,7 @@ export interface AccountsGetScreenSetVersionsResponse {
 export interface AccountsIsAvailableLoginIDParams {
     loginID: string;
 }
+
 export interface AccountsIsAvailableLoginIDResponse {
     isAvailable: boolean;
 }
@@ -999,6 +1004,11 @@ export interface AccountsSetScreenSetParams {
 
 export interface AccountsUnregisterCountersParams {
     counters: Array<Counter>;
+}
+
+export interface AuthMethods {
+    password: { enabled: boolean; }
+    push?: { enabled: boolean; }
 }
 
 export default Accounts;
