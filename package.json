@@ -28,10 +28,10 @@
     "url": "git://github.com/scotthovestadt/gigya.git"
   },
   "dependencies": {
-    "@panva/jose": "^1.9.0",
     "@types/lodash": "^4.14.138",
     "@types/node": "^12.7.3",
     "@types/request": "^2.48.2",
+    "jose": "^1.15.0",
     "lodash": "^4.17.4",
     "request": "^2.79.0",
     "strict-uri-encode": "^2.0.0"
