@@ -1,4 +1,4 @@
-Unofficial Gigya JavaScript REST SDK
+Community Developed Gigya JavaScript REST SDK
 ==============
 
 <img width="620" src="https://cloud.githubusercontent.com/assets/1831484/20920767/1a0acc7e-bb56-11e6-802f-31ed45a91768.png">
@@ -9,7 +9,7 @@ Unofficial Gigya JavaScript REST SDK
 
 
 ## Support and Usage
-This is an *unofficial* SDK for Gigya's REST API. Please do not contact Gigya support with questions or concerns about this SDK. For any issues, please make an issue on GitHub.
+This is an SDK for Gigya's REST API which comes from the developer community, not from Gigya. Please do not contact Gigya support with questions or concerns about this SDK. For any issues, please make an issue on GitHub.
 
 ## Installation
 Gigya is listed on NPM. To install, run the following command within your project folder:
