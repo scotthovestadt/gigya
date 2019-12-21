@@ -23,7 +23,7 @@ export class AuthBearerSigner extends AuthRequestSigner<RSACredentials> {
     }
 
     private signJwt(creds: RSACredentials) {
-        const {JWT, JWK} = require('@panva/jose');
+        const {JWT, JWK} = require('jose');
 
         return JWT.sign(
             {},
